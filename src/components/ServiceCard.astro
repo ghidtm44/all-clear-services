@@ -1,6 +1,7 @@
 ---
 import Icon from './Icon.astro';
 import type { Service } from '../data/services';
+import { withBase } from '../lib/url';
 
 interface Props {
   service: Service;
@@ -32,7 +33,7 @@ const { service, detailed = false } = Astro.props;
 
   {
     !detailed && (
-      <a href="/services/" class="card__link">
+      <a href={withBase('/services/')} class="card__link">
         Learn more <Icon name="chevron" size={16} />
       </a>
     )

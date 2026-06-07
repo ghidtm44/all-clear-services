@@ -1,6 +1,7 @@
 ---
 import Icon from './Icon.astro';
 import { site } from '../data/site';
+import { withBase } from '../lib/url';
 ---
 
 <section class="hero">
@@ -17,7 +18,7 @@ import { site } from '../data/site';
         workmanship, and one-hour emergency response, 24/7.
       </p>
       <div class="hero__actions">
-        <a href="/contact/" class="btn btn--primary btn--lg">
+        <a href={withBase('/contact/')} class="btn btn--primary btn--lg">
           Request Service
         </a>
         <a href={site.phoneHref} class="btn btn--on-navy btn--lg">
@@ -48,7 +49,7 @@ import { site } from '../data/site';
         quoted.”
         <cite>— Verified customer, Hamilton NJ</cite>
       </blockquote>
-      <a href="/reviews/" class="hero__card-link">
+      <a href={withBase('/reviews/')} class="hero__card-link">
         Read more reviews <Icon name="chevron" size={16} />
       </a>
     </aside>

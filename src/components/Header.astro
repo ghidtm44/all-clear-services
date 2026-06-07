@@ -2,8 +2,12 @@
 import Logo from './Logo.astro';
 import Icon from './Icon.astro';
 import { site, nav } from '../data/site';
+import { withBase } from '../lib/url';
 
-const path = Astro.url.pathname;
+// Strip the configured base from the current path so active-state comparison
+// works regardless of deploy target (apex domain vs. GH Pages subpath).
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const path = Astro.url.pathname.replace(base, '') || '/';
 const isActive = (href: string) =>
   href === '/' ? path === '/' : path.startsWith(href);
 ---
@@ -30,7 +34,7 @@ const isActive = (href: string) =>
           nav.map((item) => (
             <li>
               <a
-                href={item.href}
+                href={withBase(item.href)}
                 class:list={['nav__link', { 'is-active': isActive(item.href) }]}
                 aria-current={isActive(item.href) ? 'page' : undefined}
               >
@@ -47,7 +51,7 @@ const isActive = (href: string) =>
         <Icon name="phone" size={18} />
         <span>{site.phoneDisplay}</span>
       </a>
-      <a href="/contact/" class="btn btn--primary header__request">
+      <a href={withBase('/contact/')} class="btn btn--primary header__request">
         Request Service
       </a>
       <button
@@ -76,7 +80,7 @@ const isActive = (href: string) =>
         {
           nav.map((item) => (
             <li>
-              <a href={item.href} class="drawer__link">
+              <a href={withBase(item.href)} class="drawer__link">
                 {item.label}
                 <Icon name="chevron" size={18} />
               </a>
@@ -89,7 +93,7 @@ const isActive = (href: string) =>
       <a href={site.phoneHref} class="btn btn--navy btn--lg">
         <Icon name="phone" size={18} /> {site.phoneDisplay}
       </a>
-      <a href="/contact/" class="btn btn--primary btn--lg">Request Service</a>
+      <a href={withBase('/contact/')} class="btn btn--primary btn--lg">Request Service</a>
     </div>
     <p class="drawer__hours">{site.hours}</p>
   </div>

@@ -29,7 +29,12 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Build site
+        # Build for the GitHub Pages project subpath (ghidtm44.github.io/
+        # all-clear-services/). Drop DEPLOY_TARGET once a custom domain
+        # (allclearservices.com) is attached and the site serves from root.
         run: npm run build
+        env:
+          DEPLOY_TARGET: ghpages
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:

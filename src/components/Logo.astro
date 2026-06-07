@@ -12,6 +12,7 @@
 import { Image } from 'astro:assets';
 import lockupDark from '../assets/logo-lockup-dark.png';
 import lockupLight from '../assets/logo-lockup-light.png';
+import { withBase } from '../lib/url';
 
 interface Props {
   variant?: 'dark' | 'light';
@@ -25,7 +26,7 @@ const { variant = 'dark', class: className = '', height = 52 } = Astro.props;
 const src = variant === 'light' ? lockupLight : lockupDark;
 ---
 
-<a href="/" class={`logo ${className}`} aria-label="All Clear Services — home">
+<a href={withBase('/')} class={`logo ${className}`} aria-label="All Clear Services — home">
   <Image
     src={src}
     alt="All Clear Services"

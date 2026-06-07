@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import { site } from '../data/site';
 import Icon from '../components/Icon.astro';
+import { withBase } from '../lib/url';
 ---
 
 <Layout title="Page not found">
@@ -14,7 +15,7 @@ import Icon from '../components/Icon.astro';
         call and we’ll help directly.
       </p>
       <div class="nf__actions">
-        <a href="/" class="btn btn--primary btn--lg">Back to home</a>
+        <a href={withBase('/')} class="btn btn--primary btn--lg">Back to home</a>
         <a href={site.phoneHref} class="btn btn--ghost btn--lg">
           <Icon name="phone" size={18} /> {site.phoneDisplay}
         </a>

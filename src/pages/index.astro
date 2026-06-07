@@ -7,6 +7,7 @@ import ReviewWall from '../components/ReviewWall.astro';
 import CTABand from '../components/CTABand.astro';
 import Icon from '../components/Icon.astro';
 import { site } from '../data/site';
+import { withBase } from '../lib/url';
 ---
 
 <Layout>
@@ -68,7 +69,7 @@ import { site } from '../data/site';
           <a href={site.phoneHref} class="btn btn--primary btn--lg">
             <Icon name="phone" size={18} /> {site.phoneDisplay}
           </a>
-          <a href="/services/" class="btn btn--ghost">See all services</a>
+          <a href={withBase('/services/')} class="btn btn--ghost">See all services</a>
         </div>
       </aside>
     </div>

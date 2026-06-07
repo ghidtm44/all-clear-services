@@ -3,6 +3,7 @@ import Logo from './Logo.astro';
 import Icon from './Icon.astro';
 import { site, nav } from '../data/site';
 import { services } from '../data/services';
+import { withBase } from '../lib/url';
 
 const year = new Date().getFullYear();
 ---
@@ -28,7 +29,7 @@ const year = new Date().getFullYear();
         {
           services.map((s) => (
             <li>
-              <a href="/services/">{s.title}</a>
+              <a href={withBase('/services/')}>{s.title}</a>
             </li>
           ))
         }
@@ -38,7 +39,7 @@ const year = new Date().getFullYear();
     <div class="footer__col">
       <h3 class="footer__title">Company</h3>
       <ul>
-        {nav.map((n) => (<li><a href={n.href}>{n.label}</a></li>))}
+        {nav.map((n) => (<li><a href={withBase(n.href)}>{n.label}</a></li>))}
       </ul>
     </div>
 
