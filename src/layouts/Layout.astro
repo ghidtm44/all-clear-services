@@ -54,19 +54,13 @@ const jsonLd = {
     '@type': 'AdministrativeArea',
     name: site.address.region,
   },
+  // Regular scheduled hours are Mon–Fri; emergency service is available
+  // outside these hours but isn't modeled as standard opening hours.
   openingHoursSpecification: {
     '@type': 'OpeningHoursSpecification',
-    dayOfWeek: [
-      'Monday',
-      'Tuesday',
-      'Wednesday',
-      'Thursday',
-      'Friday',
-      'Saturday',
-      'Sunday',
-    ],
-    opens: '00:00',
-    closes: '24:00',
+    dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+    opens: '08:00',
+    closes: '17:00',
   },
 };
 ---

@@ -33,7 +33,7 @@ export const site = {
     state: 'NJ',
   },
 
-  hours: 'Open 7 days a week — emergency service available',
+  hours: 'Monday – Friday · emergency service available anytime',
   emergencyLine: 'Emergency service available with one-hour response',
 
   // ---- Social / external profiles (optional; hidden when empty) ----------

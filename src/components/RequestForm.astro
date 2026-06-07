@@ -163,9 +163,6 @@ const formReady = !!accessKey && accessKey !== 'YOUR_WEB3FORMS_ACCESS_KEY';
             <button type="button" class="slot" data-window="Afternoon (12pm–4pm)" aria-pressed="false">
               Afternoon<span>12pm – 4pm</span>
             </button>
-            <button type="button" class="slot" data-window="Evening (4pm–7pm)" aria-pressed="false">
-              Evening<span>4pm – 7pm</span>
-            </button>
           </div>
           <p class="availability__chosen" data-chosen aria-live="polite"></p>
         </fieldset>
@@ -450,7 +447,7 @@ const formReady = !!accessKey && accessKey !== 'YOUR_WEB3FORMS_ACCESS_KEY';
 
   .availability__windows {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 0.5rem;
   }
   .slot {
@@ -630,8 +627,8 @@ const formReady = !!accessKey && accessKey !== 'YOUR_WEB3FORMS_ACCESS_KEY';
         const d = new Date(viewYear, viewMonth, day);
         const iso = isoOf(d);
         const isPast = d < today;
-        const isSunday = d.getDay() === 0; // closed Sundays
-        const disabled = isPast || isSunday || isBusy(iso);
+        const isWeekend = d.getDay() === 0 || d.getDay() === 6; // closed Sat & Sun
+        const disabled = isPast || isWeekend || isBusy(iso);
 
         const cell = document.createElement('button');
         cell.type = 'button';
