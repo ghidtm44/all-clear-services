@@ -1,0 +1,46 @@
+---
+import ServiceCard from './ServiceCard.astro';
+import { services } from '../data/services';
+
+interface Props {
+  detailed?: boolean;
+  heading?: string;
+  intro?: string;
+}
+const {
+  detailed = false,
+  heading = 'Everything that runs through your pipes — and your comfort system',
+  intro = 'One trusted team for plumbing, drains, heating, cooling, and hot water. Residential and commercial, big jobs and small.',
+} = Astro.props;
+---
+
+<section class="section" id="services">
+  <div class="container">
+    <div class="section-head section-head--center reveal">
+      <p class="eyebrow">What we do</p>
+      <h2>{heading}</h2>
+      <p class="lead">{intro}</p>
+    </div>
+    <div class="grid">
+      {services.map((service) => <ServiceCard service={service} detailed={detailed} />)}
+    </div>
+  </div>
+</section>
+
+<style>
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--sp-5);
+  }
+  @media (max-width: 900px) {
+    .grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (max-width: 600px) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,0 +1,28 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import ServicesGrid from '../components/ServicesGrid.astro';
+import CTABand from '../components/CTABand.astro';
+---
+
+<Layout
+  title="Services"
+  description="Plumbing, drain & sewer, heating & cooling, hot water systems, and video camera inspection across central New Jersey. Residential and commercial."
+>
+  <PageHeader
+    eyebrow="What we do"
+    title="Full-service plumbing, heating & cooling"
+    text="One trusted team for everything that runs through your pipes and keeps your home comfortable — from routine repairs to emergency calls and underground excavation."
+  />
+
+  <ServicesGrid
+    detailed={true}
+    heading="Our services"
+    intro="Every service below is offered for both residential and commercial properties, with free estimates and flat per-job pricing."
+  />
+
+  <CTABand
+    title="Not sure which service you need?"
+    text="Give us a call and describe what’s happening — we’ll point you in the right direction and give you a free estimate."
+  />
+</Layout>

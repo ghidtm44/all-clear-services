@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://allclearplumbingandheating.com/sitemap-index.xml

@@ -1,0 +1,207 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import CTABand from '../components/CTABand.astro';
+import Icon from '../components/Icon.astro';
+import { site } from '../data/site';
+
+const values = [
+  {
+    icon: 'shield',
+    title: 'We stand behind our work',
+    body: 'Every job is backed by guaranteed workmanship. If something isn’t right, we make it right.',
+  },
+  {
+    icon: 'wrench',
+    title: 'Honest, flat pricing',
+    body: 'We charge by the job, not the hour. You’ll know the price before we pick up a tool — no song and dance.',
+  },
+  {
+    icon: 'clock',
+    title: 'Here when you need us',
+    body: 'Plumbing emergencies don’t wait for business hours. Neither do we — 24/7, including holidays.',
+  },
+  {
+    icon: 'globe',
+    title: 'Built on relationships',
+    body: 'Many of our customers have called us for years. We treat your home like our own, every visit.',
+  },
+];
+---
+
+<Layout
+  title="About"
+  description="All Clear Services is a local, family-minded plumbing and HVAC team serving central New Jersey with honest pricing and guaranteed workmanship."
+>
+  <PageHeader
+    eyebrow="About us"
+    title="Your local plumbing & HVAC team"
+    text="Customers first, workmanship guaranteed — that’s how we’ve built our reputation across central New Jersey."
+  />
+
+  <section class="section">
+    <div class="container about__lede">
+      <div class="reveal">
+        <p class="eyebrow">Our story</p>
+        <h2>Local people, professional work, no surprises</h2>
+        <p>
+          All Clear Services started with a simple idea: treat customers the way
+          you’d want your own family treated. We’re a local team of professional,
+          licensed technicians serving homes and businesses throughout Mercer
+          County and central New Jersey.
+        </p>
+        <p>
+          Whether it’s a leaky faucet, a failing water heater, a clogged sewer
+          line, or a furnace that quit on the coldest night of the year, we bring
+          the same standard to every call — show up fast, explain the problem
+          clearly, give a fair flat price, and do the job right the first time.
+        </p>
+        <p>
+          No job is too big or too small. From quick repairs to oil-to-gas
+          conversions and underground excavation, residential and commercial,
+          we’re the team your neighbors keep calling back.
+        </p>
+      </div>
+
+      <aside class="about__stats reveal">
+        <div class="about__stat">
+          <span class="about__stat-num">150+</span>
+          <span class="about__stat-label">Five-star reviews on Angi</span>
+        </div>
+        <div class="about__stat">
+          <span class="about__stat-num">24/7</span>
+          <span class="about__stat-label">Emergency service, 365 days a year</span>
+        </div>
+        <div class="about__stat">
+          <span class="about__stat-num">1-Hour</span>
+          <span class="about__stat-label">Emergency response time</span>
+        </div>
+        <div class="about__badges">
+          <span><Icon name="shield" size={16} /> Licensed & Insured</span>
+          <span><Icon name="globe" size={16} /> Hablamos Español</span>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="section section--warm">
+    <div class="container">
+      <div class="section-head section-head--center reveal">
+        <p class="eyebrow">What we stand for</p>
+        <h2>The way we work</h2>
+      </div>
+      <div class="values">
+        {
+          values.map((v) => (
+            <article class="value reveal">
+              <span class="value__icon">
+                <Icon name={v.icon} size={24} />
+              </span>
+              <h3 class="value__title">{v.title}</h3>
+              <p class="value__body">{v.body}</p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <CTABand
+    title="Experience the difference"
+    text={`Call ${site.phoneDisplay} for a free estimate, or send us a service request online.`}
+  />
+</Layout>
+
+<style>
+  .about__lede {
+    display: grid;
+    grid-template-columns: 1.4fr 0.8fr;
+    gap: var(--sp-8);
+    align-items: start;
+  }
+  .about__lede p {
+    margin-top: var(--sp-4);
+  }
+  .about__stats {
+    background: var(--navy-050);
+    border: 1px solid var(--navy-100);
+    border-radius: var(--radius-lg);
+    padding: var(--sp-6);
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-5);
+  }
+  .about__stat-num {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 2.4rem;
+    font-weight: 600;
+    color: var(--navy-700);
+    line-height: 1;
+  }
+  .about__stat-label {
+    font-size: var(--fs-small);
+    color: var(--ink-500);
+  }
+  .about__badges {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    padding-top: var(--sp-5);
+    border-top: 1px solid var(--navy-100);
+  }
+  .about__badges span {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: var(--fs-small);
+    font-weight: 600;
+    color: var(--navy-700);
+  }
+
+  .values {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--sp-5);
+  }
+  .value {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: var(--sp-5);
+  }
+  .value__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius);
+    background: var(--copper-100);
+    color: var(--copper-700);
+    margin-bottom: var(--sp-3);
+  }
+  .value__title {
+    font-size: 1.15rem;
+    margin-bottom: var(--sp-2);
+  }
+  .value__body {
+    font-size: var(--fs-small);
+    color: var(--ink-700);
+    line-height: 1.6;
+  }
+
+  @media (max-width: 880px) {
+    .about__lede {
+      grid-template-columns: 1fr;
+    }
+    .values {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  @media (max-width: 520px) {
+    .values {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

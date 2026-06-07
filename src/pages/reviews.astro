@@ -1,0 +1,51 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import ReviewWall from '../components/ReviewWall.astro';
+import CTABand from '../components/CTABand.astro';
+import { site } from '../data/site';
+
+const embed = site.integrations.googleReviewsEmbedHtml;
+---
+
+<Layout
+  title="Reviews"
+  description="Read why central New Jersey homeowners and businesses trust All Clear Services — 150+ five-star reviews and a multi-year Angi Super Service Award."
+>
+  <PageHeader
+    eyebrow="Reviews"
+    title="Don’t take our word for it"
+    text="We’ve earned 150+ five-star reviews and multiple Angi Super Service Awards by showing up, doing honest work, and standing behind it."
+  />
+
+  <ReviewWall heading="What our customers say" />
+
+  {
+    /*
+      Phase 2 reviews integration slot. When a live Google-reviews widget
+      (Trustindex / Elfsight) is configured, set
+      site.integrations.googleReviewsEmbedHtml and the live wall renders below
+      the curated quotes above. Until then, this stays hidden so launch day
+      shows real, vetted testimonials rather than an empty widget.
+      NOTE: that value is injected via set:html — operator-trusted HTML only.
+    */
+  }
+  {
+    embed && (
+      <section class="section section--warm">
+        <div class="container">
+          <div class="section-head section-head--center">
+            <p class="eyebrow">Live from Google</p>
+            <h2>Our latest Google reviews</h2>
+          </div>
+          <div class="greviews" set:html={embed} />
+        </div>
+      </section>
+    )
+  }
+
+  <CTABand
+    title="Ready to join them?"
+    text="Experience the service our customers rave about. Call for a free estimate today."
+  />
+</Layout>

@@ -1,0 +1,171 @@
+---
+import Logo from './Logo.astro';
+import Icon from './Icon.astro';
+import { site, nav } from '../data/site';
+import { services } from '../data/services';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <div class="container footer__grid">
+    <div class="footer__brand">
+      <Logo variant="light" />
+      <p class="footer__blurb">{site.blurb}</p>
+      <div class="footer__badges">
+        <span class="footer__badge">
+          <Icon name="shield" size={16} /> Licensed & Insured
+        </span>
+        <span class="footer__badge">
+          <Icon name="globe" size={16} /> Hablamos Español
+        </span>
+      </div>
+    </div>
+
+    <div class="footer__col">
+      <h3 class="footer__title">Services</h3>
+      <ul>
+        {
+          services.map((s) => (
+            <li>
+              <a href="/services/">{s.title}</a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <div class="footer__col">
+      <h3 class="footer__title">Company</h3>
+      <ul>
+        {nav.map((n) => (<li><a href={n.href}>{n.label}</a></li>))}
+      </ul>
+    </div>
+
+    <div class="footer__col">
+      <h3 class="footer__title">Get in touch</h3>
+      <ul class="footer__contact">
+        <li>
+          <a href={site.phoneHref}><Icon name="phone" size={16} /> {site.phoneDisplay}</a>
+        </li>
+        <li>
+          <a href={site.emailHref}><Icon name="mail" size={16} /> {site.email}</a>
+        </li>
+        <li>
+          <span><Icon name="pin" size={16} /> {site.address.region}</span>
+        </li>
+        <li>
+          <span><Icon name="clock" size={16} /> {site.hours}</span>
+        </li>
+      </ul>
+      <a href={site.phoneHref} class="btn btn--primary footer__call">
+        Call for a Free Estimate
+      </a>
+    </div>
+  </div>
+
+  <div class="footer__bar">
+    <div class="container footer__bar-inner">
+      <p>© {year} {site.legalName}. All rights reserved.</p>
+      <p class="footer__fine">
+        Residential & Commercial · Free Estimates · Serving Central New Jersey
+      </p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background: var(--navy-900);
+    color: #aebbcf;
+  }
+  .footer__grid {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr 1fr 1.4fr;
+    gap: var(--sp-7);
+    padding-block: var(--sp-8);
+  }
+  .footer__blurb {
+    margin-top: var(--sp-4);
+    font-size: var(--fs-small);
+    line-height: 1.6;
+    max-width: 38ch;
+  }
+  .footer__badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-3);
+    margin-top: var(--sp-5);
+  }
+  .footer__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: var(--fs-small);
+    font-weight: 500;
+    color: #d7e0ee;
+    padding: 0.4rem 0.75rem;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: var(--radius-pill);
+  }
+  .footer__title {
+    font-family: var(--font-sans);
+    font-size: var(--fs-eyebrow);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #fff;
+    margin-bottom: var(--sp-4);
+  }
+  .footer__col ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+  .footer__col a,
+  .footer__contact span {
+    color: #aebbcf;
+    font-size: var(--fs-small);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .footer__col a:hover {
+    color: #fff;
+  }
+  .footer__call {
+    margin-top: var(--sp-5);
+  }
+  .footer__bar {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  .footer__bar-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--sp-4);
+    padding-block: var(--sp-4);
+    font-size: var(--fs-small);
+    color: #a7b4c9; /* AA-contrast on navy-900 */
+  }
+
+  @media (max-width: 860px) {
+    .footer__grid {
+      grid-template-columns: 1fr 1fr;
+    }
+    .footer__brand {
+      grid-column: 1 / -1;
+    }
+  }
+  @media (max-width: 560px) {
+    .footer__grid {
+      grid-template-columns: 1fr;
+    }
+    .footer__bar-inner {
+      flex-direction: column;
+      text-align: center;
+      gap: 0.5rem;
+    }
+  }
+</style>

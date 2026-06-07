@@ -1,0 +1,354 @@
+---
+import Logo from './Logo.astro';
+import Icon from './Icon.astro';
+import { site, nav } from '../data/site';
+
+const path = Astro.url.pathname;
+const isActive = (href: string) =>
+  href === '/' ? path === '/' : path.startsWith(href);
+---
+
+<!-- Emergency contact bar -->
+<div class="topbar">
+  <div class="container topbar__inner">
+    <span class="topbar__msg">
+      <Icon name="clock" size={16} /> 24/7 Emergency Service · One-Hour Response
+    </span>
+    <a class="topbar__phone" href={site.phoneHref}>
+      <Icon name="phone" size={16} /> {site.phoneDisplay}
+    </a>
+  </div>
+</div>
+
+<header class="header" data-header>
+  <div class="container header__inner">
+    <Logo />
+
+    <nav class="nav" aria-label="Primary">
+      <ul class="nav__list">
+        {
+          nav.map((item) => (
+            <li>
+              <a
+                href={item.href}
+                class:list={['nav__link', { 'is-active': isActive(item.href) }]}
+                aria-current={isActive(item.href) ? 'page' : undefined}
+              >
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="header__cta">
+      <a href={site.phoneHref} class="header__phone">
+        <Icon name="phone" size={18} />
+        <span>{site.phoneDisplay}</span>
+      </a>
+      <a href="/contact/" class="btn btn--primary header__request">
+        Request Service
+      </a>
+      <button
+        class="header__burger"
+        aria-label="Open menu"
+        aria-expanded="false"
+        data-menu-toggle
+      >
+        <Icon name="menu" size={26} />
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- Mobile drawer -->
+<div class="drawer" data-drawer hidden>
+  <div class="drawer__panel">
+    <div class="drawer__head">
+      <Logo />
+      <button class="drawer__close" aria-label="Close menu" data-menu-close>
+        <Icon name="close" size={26} />
+      </button>
+    </div>
+    <nav aria-label="Mobile">
+      <ul class="drawer__list">
+        {
+          nav.map((item) => (
+            <li>
+              <a href={item.href} class="drawer__link">
+                {item.label}
+                <Icon name="chevron" size={18} />
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+    <div class="drawer__actions">
+      <a href={site.phoneHref} class="btn btn--navy btn--lg">
+        <Icon name="phone" size={18} /> {site.phoneDisplay}
+      </a>
+      <a href="/contact/" class="btn btn--primary btn--lg">Request Service</a>
+    </div>
+    <p class="drawer__hours">{site.hours}</p>
+  </div>
+</div>
+
+<style>
+  .topbar {
+    background: var(--navy-900);
+    color: #c9d6e8;
+    font-size: var(--fs-small);
+  }
+  .topbar__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-block: 0.5rem;
+  }
+  .topbar__msg {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+  }
+  .topbar__phone {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: #fff;
+    font-weight: 600;
+  }
+  .topbar__phone:hover {
+    color: var(--copper-100);
+  }
+
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: saturate(160%) blur(12px);
+    border-bottom: 1px solid var(--line);
+    transition: box-shadow 0.2s var(--ease);
+  }
+  .header.is-scrolled {
+    box-shadow: var(--shadow-sm);
+  }
+  .header__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--sp-5);
+    padding-block: 0.8rem;
+  }
+
+  .nav {
+    margin-left: auto;
+  }
+  .nav__list {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    list-style: none;
+    padding: 0;
+  }
+  .nav__link {
+    display: inline-block;
+    padding: 0.5rem 0.85rem;
+    border-radius: var(--radius-pill);
+    font-weight: 500;
+    color: var(--ink-700);
+    transition: color 0.15s var(--ease), background 0.15s var(--ease);
+  }
+  .nav__link:hover {
+    color: var(--navy-900);
+    background: var(--navy-050);
+  }
+  .nav__link.is-active {
+    color: var(--navy-900);
+    font-weight: 600;
+  }
+
+  .header__cta {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-4);
+  }
+  .header__phone {
+    display: none;
+    align-items: center;
+    gap: 0.45rem;
+    font-weight: 700;
+    color: var(--navy-900);
+  }
+  .header__phone:hover {
+    color: var(--copper-600);
+  }
+  .header__burger {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--navy-900);
+    cursor: pointer;
+    padding: 0.25rem;
+  }
+
+  /* Drawer */
+  .drawer {
+    position: fixed;
+    inset: 0;
+    z-index: 150;
+    background: rgba(11, 31, 58, 0.45);
+    backdrop-filter: blur(2px);
+  }
+  .drawer__panel {
+    position: absolute;
+    inset: 0 0 0 auto;
+    width: min(86vw, 360px);
+    background: var(--paper);
+    padding: var(--sp-5);
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-5);
+    box-shadow: var(--shadow-lg);
+    transform: translateX(100%);
+    transition: transform 0.28s var(--ease);
+  }
+  .drawer.is-open .drawer__panel {
+    transform: none;
+  }
+  .drawer__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .drawer__close {
+    background: none;
+    border: none;
+    color: var(--ink-700);
+    cursor: pointer;
+    padding: 0.25rem;
+  }
+  .drawer__list {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  .drawer__link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.9rem 0.5rem;
+    font-size: 1.15rem;
+    font-weight: 500;
+    color: var(--ink-900);
+    border-bottom: 1px solid var(--line);
+  }
+  .drawer__link :global(.icon) {
+    color: var(--ink-300);
+  }
+  .drawer__actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-3);
+    margin-top: auto;
+  }
+  .drawer__hours {
+    text-align: center;
+    font-size: var(--fs-small);
+    color: var(--ink-500);
+  }
+
+  /* Responsive */
+  @media (max-width: 920px) {
+    .nav {
+      display: none;
+    }
+    .header__request {
+      display: none;
+    }
+    .header__burger {
+      display: inline-flex;
+    }
+  }
+  @media (min-width: 560px) {
+    .header__phone {
+      display: inline-flex;
+    }
+  }
+</style>
+
+<script>
+  // Sticky header shadow on scroll
+  const header = document.querySelector('[data-header]');
+  const onScroll = () =>
+    header?.classList.toggle('is-scrolled', window.scrollY > 8);
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  // Mobile drawer
+  const drawer = document.querySelector('[data-drawer]') as HTMLElement | null;
+  const toggle = document.querySelector('[data-menu-toggle]');
+  const closeBtn = document.querySelector('[data-menu-close]');
+
+  const panel = drawer?.querySelector('.drawer__panel') as HTMLElement | null;
+  const main = document.getElementById('main');
+
+  const open = () => {
+    if (!drawer) return;
+    drawer.hidden = false;
+    requestAnimationFrame(() => drawer.classList.add('is-open'));
+    toggle?.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+    // Hide the rest of the page from AT + tab order while the drawer is open.
+    main?.setAttribute('inert', '');
+    // Move focus into the drawer (the close button).
+    (closeBtn as HTMLElement | null)?.focus();
+  };
+  const close = () => {
+    if (!drawer) return;
+    drawer.classList.remove('is-open');
+    toggle?.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+    main?.removeAttribute('inert');
+    setTimeout(() => (drawer.hidden = true), 280);
+    // Restore focus to the control that opened the drawer.
+    (toggle as HTMLElement | null)?.focus();
+  };
+
+  // Trap Tab within the drawer panel while open.
+  const trapFocus = (e: KeyboardEvent) => {
+    if (e.key !== 'Tab' || !panel || drawer?.hidden) return;
+    const focusable = panel.querySelectorAll<HTMLElement>(
+      'a[href], button:not([disabled]), input, [tabindex]:not([tabindex="-1"])'
+    );
+    if (!focusable.length) return;
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault();
+      first.focus();
+    }
+  };
+
+  toggle?.addEventListener('click', open);
+  closeBtn?.addEventListener('click', close);
+  drawer?.addEventListener('click', (e) => {
+    if (e.target === drawer) close();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && drawer && !drawer.hidden) close();
+    trapFocus(e);
+  });
+  // Close drawer when a link is tapped
+  drawer?.querySelectorAll('a').forEach((a) =>
+    a.addEventListener('click', close)
+  );
+</script>

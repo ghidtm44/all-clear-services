@@ -1,0 +1,49 @@
+---
+interface Props {
+  eyebrow?: string;
+  title: string;
+  text?: string;
+}
+const { eyebrow, title, text } = Astro.props;
+---
+
+<section class="pagehead">
+  <div class="pagehead__bg" aria-hidden="true"></div>
+  <div class="container pagehead__inner">
+    {eyebrow && <p class="eyebrow pagehead__eyebrow">{eyebrow}</p>}
+    <h1 class="pagehead__title">{title}</h1>
+    {text && <p class="lead pagehead__text">{text}</p>}
+  </div>
+</section>
+
+<style>
+  .pagehead {
+    position: relative;
+    background: var(--navy-900);
+    color: #d7e0ee;
+    overflow: hidden;
+  }
+  .pagehead__bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(50% 70% at 90% 0%, rgba(207, 116, 64, 0.18), transparent 60%),
+      linear-gradient(160deg, var(--navy-900), var(--navy-800));
+  }
+  .pagehead__inner {
+    position: relative;
+    padding-block: clamp(3rem, 2rem + 5vw, 5rem);
+    max-width: 64ch;
+  }
+  .pagehead__eyebrow {
+    color: var(--copper-500);
+  }
+  .pagehead__title {
+    color: #fff;
+    font-size: var(--fs-h1);
+  }
+  .pagehead__text {
+    color: #c4d1e4;
+    margin-top: var(--sp-4);
+  }
+</style>

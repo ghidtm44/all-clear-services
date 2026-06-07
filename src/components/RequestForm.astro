@@ -1,0 +1,602 @@
+---
+import Icon from './Icon.astro';
+import { site } from '../data/site';
+import { services } from '../data/services';
+
+const accessKey = site.integrations.web3formsAccessKey;
+const formReady = !!accessKey && accessKey !== 'YOUR_WEB3FORMS_ACCESS_KEY';
+---
+
+<section class="section request" id="request">
+  <div class="container request__grid">
+    <!-- Left: context & reassurance -->
+    <div class="request__intro reveal">
+      <p class="eyebrow">Request service</p>
+      <h2>Tell us what’s going on — we’ll reach out to schedule.</h2>
+      <p class="lead">
+        Pick a day and time that work for you below. This sends your request
+        straight to our office; a real person will call or email you back to
+        confirm the appointment. For emergencies, please call
+        <a href={site.phoneHref} class="request__phone-link">{site.phoneDisplay}</a>.
+      </p>
+
+      <ul class="request__points">
+        <li><Icon name="check" size={18} /> No automated booking — we confirm every appointment personally</li>
+        <li><Icon name="check" size={18} /> Free, no-obligation estimates</li>
+        <li><Icon name="check" size={18} /> 24/7 emergency response available</li>
+      </ul>
+
+      <div class="request__callout">
+        <Icon name="phone" size={22} />
+        <div>
+          <p class="request__callout-label">Prefer to talk now?</p>
+          <a href={site.phoneHref} class="request__callout-phone">
+            {site.phoneDisplay}
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: the form -->
+    <div class="request__formwrap reveal">
+      {
+        !formReady && (
+          <p class="request__notice">
+            <strong>Setup note:</strong> add a Web3Forms access key to
+            <code>src/data/site.ts</code> to enable live submissions. The form
+            below is fully built and will work the moment a key is in place.
+          </p>
+        )
+      }
+
+      <form
+        class="form"
+        action="https://api.web3forms.com/submit"
+        method="POST"
+        data-request-form
+      >
+        <!-- Web3Forms config -->
+        <input type="hidden" name="access_key" value={accessKey} />
+        <input
+          type="hidden"
+          name="subject"
+          value="New service request — All Clear Services website"
+        />
+        <input type="hidden" name="from_name" value="All Clear Services Website" />
+        <!-- Honeypot anti-spam: bots fill this, humans don't -->
+        <input
+          type="checkbox"
+          name="botcheck"
+          class="visually-hidden"
+          style="display:none"
+          tabindex="-1"
+          autocomplete="off"
+        />
+        <!-- Selected availability is mirrored here for the email -->
+        <input type="hidden" name="preferred_appointment" data-availability-field />
+
+        <div class="form__row">
+          <div class="field">
+            <label for="name">Full name <span aria-hidden="true">*</span></label>
+            <input id="name" name="name" type="text" required autocomplete="name" />
+          </div>
+          <div class="field">
+            <label for="phone">Phone <span aria-hidden="true">*</span></label>
+            <input
+              id="phone"
+              name="phone"
+              type="tel"
+              required
+              autocomplete="tel"
+              inputmode="tel"
+            />
+          </div>
+        </div>
+
+        <div class="form__row">
+          <div class="field">
+            <label for="email">Email <span aria-hidden="true">*</span></label>
+            <input id="email" name="email" type="email" required autocomplete="email" />
+          </div>
+          <div class="field">
+            <label for="town">Town / city</label>
+            <input id="town" name="town" type="text" autocomplete="address-level2" />
+          </div>
+        </div>
+
+        <div class="form__row">
+          <div class="field">
+            <label for="service">Service needed <span aria-hidden="true">*</span></label>
+            <select id="service" name="service" required>
+              <option value="" disabled selected>Choose a service…</option>
+              {services.map((s) => <option value={s.title}>{s.title}</option>)}
+              <option value="Other">Something else</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="urgency">How urgent?</label>
+            <select id="urgency" name="urgency">
+              <option value="Standard — flexible">Standard — flexible</option>
+              <option value="Soon — within a few days">Soon — within a few days</option>
+              <option value="Emergency — call me ASAP">Emergency — call me ASAP</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Availability picker -->
+        <fieldset class="availability">
+          <legend>Preferred day & time</legend>
+          <p class="availability__help">
+            Choose what works best — we’ll confirm the exact time when we reach
+            out. These are requests, not confirmed bookings.
+          </p>
+
+          <div class="availability__days" data-days role="group" aria-label="Preferred day"></div>
+
+          <div class="availability__windows" data-windows role="group" aria-label="Preferred time window">
+            <button type="button" class="slot" data-window="Morning (8am–12pm)" aria-pressed="false">
+              Morning<span>8am – 12pm</span>
+            </button>
+            <button type="button" class="slot" data-window="Afternoon (12pm–4pm)" aria-pressed="false">
+              Afternoon<span>12pm – 4pm</span>
+            </button>
+            <button type="button" class="slot" data-window="Evening (4pm–7pm)" aria-pressed="false">
+              Evening<span>4pm – 7pm</span>
+            </button>
+          </div>
+          <p class="availability__chosen" data-chosen aria-live="polite"></p>
+        </fieldset>
+
+        <div class="field">
+          <label for="message">Describe the issue</label>
+          <textarea
+            id="message"
+            name="message"
+            rows="4"
+            placeholder="e.g. Water heater is leaking from the base and there's no hot water…"
+          ></textarea>
+        </div>
+
+        <button type="submit" class="btn btn--primary btn--lg form__submit">
+          Send Service Request
+        </button>
+        <p class="form__fineprint">
+          By submitting, you agree we may contact you about your request. We
+          never share your information.
+        </p>
+
+        <p class="form__status" data-form-status role="status" aria-live="polite" hidden></p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<style>
+  .request__grid {
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: var(--sp-8);
+    align-items: start;
+  }
+  .request__intro .lead {
+    margin-top: var(--sp-4);
+  }
+  .request__phone-link {
+    color: var(--copper-600);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .request__points {
+    list-style: none;
+    padding: 0;
+    margin: var(--sp-6) 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+  }
+  .request__points li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    font-size: var(--fs-small);
+    color: var(--ink-700);
+  }
+  .request__points :global(.icon) {
+    color: var(--success-600);
+    margin-top: 2px;
+  }
+  .request__callout {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-4);
+    padding: var(--sp-5);
+    background: var(--navy-050);
+    border: 1px solid var(--navy-100);
+    border-radius: var(--radius);
+  }
+  .request__callout :global(.icon) {
+    color: var(--navy-700);
+  }
+  .request__callout-label {
+    font-size: var(--fs-small);
+    color: var(--ink-500);
+  }
+  .request__callout-phone {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--navy-900);
+  }
+
+  .request__formwrap {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    padding: var(--sp-6);
+    box-shadow: var(--shadow);
+  }
+  .request__notice {
+    background: var(--copper-100);
+    border: 1px solid #e9cbb6;
+    border-radius: var(--radius);
+    padding: var(--sp-4);
+    font-size: var(--fs-small);
+    color: var(--copper-700);
+    margin-bottom: var(--sp-5);
+  }
+  .request__notice code {
+    background: rgba(154, 75, 34, 0.12);
+    padding: 0.1em 0.4em;
+    border-radius: 4px;
+    font-size: 0.85em;
+  }
+
+  /* Form primitives */
+  .form__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--sp-4);
+  }
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin-bottom: var(--sp-4);
+  }
+  .field label {
+    font-size: var(--fs-small);
+    font-weight: 600;
+    color: var(--ink-900);
+  }
+  .field label span {
+    color: var(--copper-600);
+  }
+  .field input,
+  .field select,
+  .field textarea {
+    font-family: inherit;
+    font-size: var(--fs-body);
+    color: var(--ink-900);
+    padding: 0.7rem 0.85rem;
+    border: 1.5px solid var(--line);
+    border-radius: var(--radius-sm);
+    background: var(--paper);
+    transition: border-color 0.15s var(--ease), box-shadow 0.15s var(--ease);
+  }
+  .field input:focus,
+  .field select:focus,
+  .field textarea:focus {
+    outline: none;
+    border-color: var(--navy-600);
+    box-shadow: 0 0 0 3px rgba(36, 74, 128, 0.12);
+  }
+  .field textarea {
+    resize: vertical;
+  }
+
+  /* Availability */
+  .availability {
+    border: 1.5px solid var(--line);
+    border-radius: var(--radius);
+    padding: var(--sp-5);
+    margin-bottom: var(--sp-4);
+  }
+  .availability legend {
+    font-size: var(--fs-small);
+    font-weight: 700;
+    color: var(--ink-900);
+    padding-inline: 0.5rem;
+  }
+  .availability__help {
+    font-size: 0.85rem;
+    color: var(--ink-500);
+    margin-bottom: var(--sp-4);
+  }
+  .availability__days {
+    display: flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+    margin-bottom: var(--sp-4);
+    scrollbar-width: thin;
+  }
+  .day {
+    flex: 0 0 auto;
+    min-width: 64px;
+    text-align: center;
+    padding: 0.5rem 0.6rem;
+    border: 1.5px solid var(--line);
+    border-radius: var(--radius-sm);
+    background: var(--paper);
+    cursor: pointer;
+    transition: all 0.15s var(--ease);
+    font-family: inherit;
+  }
+  .day:hover:not(:disabled) {
+    border-color: var(--navy-600);
+  }
+  .day[aria-pressed='true'] {
+    background: var(--navy-700);
+    border-color: var(--navy-700);
+    color: #fff;
+  }
+  .day:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+  .day__dow {
+    display: block;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: inherit;
+    opacity: 0.7;
+  }
+  .day__num {
+    display: block;
+    font-size: 1.2rem;
+    font-weight: 600;
+    line-height: 1.2;
+  }
+  .day__mon {
+    display: block;
+    font-size: 0.68rem;
+    opacity: 0.7;
+  }
+
+  .availability__windows {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+  }
+  .slot {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: 0.65rem 0.5rem;
+    border: 1.5px solid var(--line);
+    border-radius: var(--radius-sm);
+    background: var(--paper);
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 600;
+    font-size: var(--fs-small);
+    color: var(--ink-900);
+    transition: all 0.15s var(--ease);
+  }
+  .slot span {
+    font-weight: 400;
+    font-size: 0.78rem;
+    color: var(--ink-500);
+  }
+  .slot:hover {
+    border-color: var(--navy-600);
+  }
+  .slot[aria-pressed='true'] {
+    background: var(--copper-600);
+    border-color: var(--copper-600);
+    color: #fff;
+  }
+  .slot[aria-pressed='true'] span {
+    color: rgba(255, 255, 255, 0.85);
+  }
+  .availability__chosen {
+    margin-top: var(--sp-4);
+    font-size: var(--fs-small);
+    color: var(--navy-700);
+    font-weight: 600;
+    min-height: 1.2em;
+  }
+
+  .form__submit {
+    width: 100%;
+    margin-top: var(--sp-2);
+  }
+  .form__fineprint {
+    font-size: 0.8rem;
+    color: var(--ink-500);
+    text-align: center;
+    margin-top: var(--sp-3);
+  }
+  .form__status {
+    margin-top: var(--sp-4);
+    padding: var(--sp-4);
+    border-radius: var(--radius-sm);
+    font-size: var(--fs-small);
+    text-align: center;
+  }
+  .form__status.is-success {
+    background: #e7f4ed;
+    color: var(--success-600);
+    border: 1px solid #b9dcc7;
+  }
+  .form__status.is-error {
+    background: #fdeaea;
+    color: #b3261e;
+    border: 1px solid #f3c4c1;
+  }
+
+  @media (max-width: 880px) {
+    .request__grid {
+      grid-template-columns: 1fr;
+      gap: var(--sp-6);
+    }
+  }
+  @media (max-width: 520px) {
+    .form__row {
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
+  }
+</style>
+
+<script>
+  /**
+   * Availability picker + form submission.
+   *
+   * The day strip is generated client-side for the next business days. Today,
+   * these are all selectable. PHASE 2: fetch real free/busy from a serverless
+   * endpoint (Google Calendar FreeBusy API) and call `markBusy(dateISO)` /
+   * disable fully-booked days. A static site cannot read a private calendar
+   * directly — that requires a backend with a service account or OAuth.
+   *
+   * Submission posts to Web3Forms via fetch so we can show inline success
+   * without a full page redirect. No appointment is ever auto-booked: the
+   * payload is simply emailed to the office for manual outreach.
+   */
+  type DayBtn = HTMLButtonElement;
+
+  const form = document.querySelector('[data-request-form]') as HTMLFormElement | null;
+  const daysWrap = form?.querySelector('[data-days]') as HTMLElement | null;
+  const windowsWrap = form?.querySelector('[data-windows]') as HTMLElement | null;
+  const chosenEl = form?.querySelector('[data-chosen]') as HTMLElement | null;
+  const hiddenField = form?.querySelector('[data-availability-field]') as HTMLInputElement | null;
+  const statusEl = form?.querySelector('[data-form-status]') as HTMLElement | null;
+
+  // Bail cleanly if any required node is missing (e.g. after a future refactor)
+  // rather than throwing and killing the whole picker silently.
+  if (form && daysWrap && windowsWrap && chosenEl && hiddenField && statusEl) {
+    let selectedDay = '';
+    let selectedDayLabel = '';
+    let selectedWindow = '';
+
+    // Build the next 10 business days (skip Sun by default; plumber works Sat).
+    const DOW = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const today = new Date();
+    let added = 0;
+    for (let i = 1; added < 10; i++) {
+      const d = new Date(today);
+      d.setDate(today.getDate() + i);
+      if (d.getDay() === 0) continue; // skip Sundays in the picker
+      added++;
+      // Build the ISO date from LOCAL parts, not toISOString() (which is UTC
+      // and would roll to the next day in the evening for US timezones — making
+      // the emailed date disagree with the human label).
+      const iso = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(
+        d.getDate()
+      ).padStart(2, '0')}`;
+      const label = `${DOW[d.getDay()]} ${MON[d.getMonth()]} ${d.getDate()}`;
+      const btn = document.createElement('button') as DayBtn;
+      btn.type = 'button';
+      btn.className = 'day';
+      btn.dataset.date = iso;
+      btn.dataset.label = label;
+      btn.setAttribute('aria-pressed', 'false');
+      btn.innerHTML =
+        `<span class="day__dow">${DOW[d.getDay()]}</span>` +
+        `<span class="day__num">${d.getDate()}</span>` +
+        `<span class="day__mon">${MON[d.getMonth()]}</span>`;
+      daysWrap.appendChild(btn);
+    }
+
+    const sync = () => {
+      if (selectedDayLabel && selectedWindow) {
+        chosenEl.textContent = `Requested: ${selectedDayLabel}, ${selectedWindow}`;
+      } else if (selectedDayLabel) {
+        chosenEl.textContent = `Requested: ${selectedDayLabel} — pick a time window`;
+      } else {
+        chosenEl.textContent = '';
+      }
+      hiddenField.value =
+        selectedDayLabel && selectedWindow
+          ? `${selectedDayLabel} (${selectedDay}) — ${selectedWindow}`
+          : selectedDayLabel
+          ? `${selectedDayLabel} (${selectedDay}) — no time preference`
+          : 'No preference given';
+    };
+
+    daysWrap.addEventListener('click', (e) => {
+      const btn = (e.target as HTMLElement).closest('.day') as DayBtn | null;
+      if (!btn || btn.disabled) return;
+      daysWrap.querySelectorAll('.day').forEach((b) => b.setAttribute('aria-pressed', 'false'));
+      btn.setAttribute('aria-pressed', 'true');
+      selectedDay = btn.dataset.date || '';
+      selectedDayLabel = btn.dataset.label || '';
+      sync();
+    });
+
+    windowsWrap.addEventListener('click', (e) => {
+      const btn = (e.target as HTMLElement).closest('.slot') as HTMLButtonElement | null;
+      if (!btn) return;
+      windowsWrap.querySelectorAll('.slot').forEach((b) => b.setAttribute('aria-pressed', 'false'));
+      btn.setAttribute('aria-pressed', 'true');
+      selectedWindow = btn.dataset.window || '';
+      sync();
+    });
+
+    // Async submit with inline feedback.
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const submitBtn = form.querySelector('.form__submit') as HTMLButtonElement;
+      const data = new FormData(form);
+
+      // Guard: don't actually POST a placeholder key.
+      const key = String(data.get('access_key') || '');
+      if (!key || key === 'YOUR_WEB3FORMS_ACCESS_KEY') {
+        showStatus(
+          'This form isn’t connected yet. Add a Web3Forms access key to enable submissions.',
+          false
+        );
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Sending…';
+      try {
+        const res = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          body: data,
+        });
+        const json = await res.json();
+        if (json.success) {
+          form.reset();
+          chosenEl.textContent = '';
+          showStatus(
+            'Thanks — your request is in. A member of our team will reach out shortly to confirm a time. For emergencies, please call us directly.',
+            true
+          );
+        } else {
+          throw new Error(json.message || 'Submission failed');
+        }
+      } catch (err) {
+        showStatus(
+          'Something went wrong sending your request. Please call us at the number above and we’ll take care of you.',
+          false
+        );
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Send Service Request';
+      }
+    });
+
+    function showStatus(msg: string, ok: boolean) {
+      statusEl.textContent = msg;
+      statusEl.hidden = false;
+      statusEl.classList.toggle('is-success', ok);
+      statusEl.classList.toggle('is-error', !ok);
+      statusEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }
+</script>

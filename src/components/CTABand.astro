@@ -1,0 +1,64 @@
+---
+import Icon from './Icon.astro';
+import { site } from '../data/site';
+
+interface Props {
+  title?: string;
+  text?: string;
+}
+const {
+  title = 'Need a plumber or HVAC tech today?',
+  text = 'Call now for a free, no-obligation estimate — or send a service request and we’ll reach out to schedule.',
+} = Astro.props;
+---
+
+<section class="section--tight cta">
+  <div class="container cta__inner">
+    <div>
+      <h2 class="cta__title">{title}</h2>
+      <p class="cta__text">{text}</p>
+    </div>
+    <div class="cta__actions">
+      <a href={site.phoneHref} class="btn btn--on-navy btn--lg">
+        <Icon name="phone" size={18} /> {site.phoneDisplay}
+      </a>
+      <a href="/contact/" class="btn btn--primary btn--lg">Request Service</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cta {
+    background: linear-gradient(135deg, var(--navy-800), var(--navy-700));
+    color: #fff;
+  }
+  .cta__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--sp-6);
+    flex-wrap: wrap;
+  }
+  .cta__title {
+    color: #fff;
+    font-size: var(--fs-h2);
+  }
+  .cta__text {
+    color: #c8d5e9;
+    margin-top: 0.5rem;
+    max-width: 46ch;
+  }
+  .cta__actions {
+    display: flex;
+    gap: var(--sp-4);
+    flex-wrap: wrap;
+  }
+  @media (max-width: 720px) {
+    .cta__actions {
+      width: 100%;
+    }
+    .cta__actions .btn {
+      flex: 1;
+    }
+  }
+</style>

@@ -1,0 +1,31 @@
+---
+/**
+ * Google Analytics 4. Loads ONLY when a real Measurement ID is configured in
+ * site.integrations.gaMeasurementId — so local dev and preview builds never
+ * fire analytics, and the site won't ship a broken/placeholder tag.
+ */
+import { site } from '../data/site';
+
+const id = site.integrations.gaMeasurementId;
+const enabled = !!id && id !== 'G-XXXXXXXXXX';
+---
+
+{
+  enabled && (
+    <Fragment>
+      <script
+        is:inline
+        async
+        src={`https://www.googletagmanager.com/gtag/js?id=${id}`}
+      />
+      <script is:inline define:vars={{ id }}>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+          dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+        gtag('config', id, { anonymize_ip: true });
+      </script>
+    </Fragment>
+  )
+}

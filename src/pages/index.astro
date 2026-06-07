@@ -1,0 +1,151 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Hero from '../components/Hero.astro';
+import TrustBar from '../components/TrustBar.astro';
+import ServicesGrid from '../components/ServicesGrid.astro';
+import ReviewWall from '../components/ReviewWall.astro';
+import CTABand from '../components/CTABand.astro';
+import Icon from '../components/Icon.astro';
+import { site } from '../data/site';
+---
+
+<Layout>
+  <Hero />
+  <TrustBar />
+
+  <ServicesGrid />
+
+  <!-- Why us -->
+  <section class="section section--warm">
+    <div class="container why">
+      <div class="why__text reveal">
+        <p class="eyebrow">Why All Clear</p>
+        <h2>Local, honest, and on call when you need us</h2>
+        <p class="lead">
+          We’re a local team that treats your home like our own. No song and
+          dance, no hourly meter running while we work — just clear answers,
+          fair flat pricing, and workmanship we stand behind.
+        </p>
+        <ul class="why__list">
+          <li>
+            <Icon name="shield" size={22} />
+            <div>
+              <strong>Guaranteed workmanship</strong>
+              <span>Licensed, insured, and accountable for every job.</span>
+            </div>
+          </li>
+          <li>
+            <Icon name="clock" size={22} />
+            <div>
+              <strong>One-hour emergency response</strong>
+              <span>{site.hours}.</span>
+            </div>
+          </li>
+          <li>
+            <Icon name="wrench" size={22} />
+            <div>
+              <strong>Flat per-job pricing</strong>
+              <span>Know the price before we start — no hourly surprises.</span>
+            </div>
+          </li>
+          <li>
+            <Icon name="globe" size={22} />
+            <div>
+              <strong>Hablamos Español</strong>
+              <span>Spanish- and English-speaking technicians.</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <aside class="why__panel reveal">
+        <h3 class="why__panel-title">No job too big or too small</h3>
+        <p>
+          From a single washer replacement to a full sewer line excavation,
+          residential or commercial — we bring the same care to every call.
+        </p>
+        <div class="why__cta">
+          <a href={site.phoneHref} class="btn btn--primary btn--lg">
+            <Icon name="phone" size={18} /> {site.phoneDisplay}
+          </a>
+          <a href="/services/" class="btn btn--ghost">See all services</a>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <ReviewWall limit={6} />
+
+  <CTABand />
+</Layout>
+
+<style>
+  .why {
+    display: grid;
+    grid-template-columns: 1.3fr 0.85fr;
+    gap: var(--sp-8);
+    align-items: center;
+  }
+  .why__list {
+    list-style: none;
+    padding: 0;
+    margin-top: var(--sp-6);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--sp-5);
+  }
+  .why__list li {
+    display: flex;
+    gap: var(--sp-3);
+  }
+  .why__list :global(.icon) {
+    color: var(--copper-600);
+    flex-shrink: 0;
+  }
+  .why__list strong {
+    display: block;
+    color: var(--ink-900);
+  }
+  .why__list span {
+    font-size: var(--fs-small);
+    color: var(--ink-500);
+  }
+
+  .why__panel {
+    background: var(--navy-900);
+    color: #d7e0ee;
+    border-radius: var(--radius-lg);
+    padding: var(--sp-7);
+    box-shadow: var(--shadow-lg);
+  }
+  .why__panel-title {
+    color: #fff;
+    margin-bottom: var(--sp-3);
+  }
+  .why__cta {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-3);
+    margin-top: var(--sp-6);
+  }
+  .why__cta .btn--ghost {
+    color: #cdd9ea;
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+  .why__cta .btn--ghost:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.4);
+  }
+
+  @media (max-width: 880px) {
+    .why {
+      grid-template-columns: 1fr;
+      gap: var(--sp-6);
+    }
+  }
+  @media (max-width: 520px) {
+    .why__list {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

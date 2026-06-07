@@ -1,0 +1,91 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import RequestForm from '../components/RequestForm.astro';
+import Icon from '../components/Icon.astro';
+import { site } from '../data/site';
+
+const bookingUrl = site.integrations.housecallBookingUrl;
+---
+
+<Layout
+  title="Request Service"
+  description="Request plumbing or HVAC service from All Clear Services. Tell us what you need and your preferred time — we’ll reach out to confirm. 24/7 emergency line available."
+>
+  <PageHeader
+    eyebrow="Get in touch"
+    title="Request service"
+    text="Send us the details and your preferred day and time. A real person will follow up to confirm your appointment — we never auto-book."
+  />
+
+  <!-- Quick contact strip -->
+  <section class="section--tight contactstrip">
+    <div class="container contactstrip__inner">
+      <a href={site.phoneHref} class="contactstrip__item">
+        <Icon name="phone" size={24} />
+        <div>
+          <span class="contactstrip__label">Call us, 24/7</span>
+          <span class="contactstrip__value">{site.phoneDisplay}</span>
+        </div>
+      </a>
+      <a href={site.emailHref} class="contactstrip__item">
+        <Icon name="mail" size={24} />
+        <div>
+          <span class="contactstrip__label">Email</span>
+          <span class="contactstrip__value">{site.email}</span>
+        </div>
+      </a>
+      <div class="contactstrip__item">
+        <Icon name="pin" size={24} />
+        <div>
+          <span class="contactstrip__label">Service area</span>
+          <span class="contactstrip__value">{site.address.region}</span>
+        </div>
+      </div>
+      {
+        bookingUrl && (
+          <a href={bookingUrl} class="btn btn--navy contactstrip__book" target="_blank" rel="noopener">
+            <Icon name="calendar" size={18} /> Book Online
+          </a>
+        )
+      }
+    </div>
+  </section>
+
+  <RequestForm />
+</Layout>
+
+<style>
+  .contactstrip {
+    background: var(--paper);
+    border-bottom: 1px solid var(--line);
+  }
+  .contactstrip__inner {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-6);
+    align-items: center;
+  }
+  .contactstrip__item {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-3);
+    color: var(--ink-900);
+  }
+  .contactstrip__item :global(.icon) {
+    color: var(--copper-600);
+  }
+  .contactstrip__label {
+    display: block;
+    font-size: var(--fs-small);
+    color: var(--ink-500);
+  }
+  .contactstrip__value {
+    display: block;
+    font-weight: 600;
+    color: var(--ink-900);
+  }
+  .contactstrip__book {
+    margin-left: auto;
+  }
+</style>
