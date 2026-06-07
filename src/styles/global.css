@@ -19,6 +19,13 @@
   --copper-500: #cf7440; /* hover */
   --copper-100: #f6e4d8;
 
+  /* Brand colors — sampled from the logo. Blue + yellow are THE brand pair. */
+  --brand-blue: #1b3a66; /* phone-pill blue (= navy-700) */
+  --brand-blue-hover: #244a80;
+  --brand-yellow: #f4c600; /* mascot-shirt yellow */
+  --brand-yellow-hover: #ffd31f;
+  --brand-yellow-ink: #1b3a66; /* navy text on yellow fills (AA on yellow) */
+
   --ink-900: #14181f; /* primary text */
   --ink-700: #38414f; /* body text */
   --ink-500: #5d6878; /* muted */
@@ -232,24 +239,41 @@ p {
   transform: translateY(1px);
 }
 
+/* Primary CTA — brand blue with brand-yellow text. The signature button. */
 .btn--primary {
-  background: var(--copper-600);
-  color: #fff;
+  background: var(--brand-blue);
+  color: var(--brand-yellow);
   box-shadow: var(--shadow-sm);
 }
 
 .btn--primary:hover {
-  background: var(--copper-500);
+  background: var(--brand-blue-hover);
+  color: var(--brand-yellow-hover);
   box-shadow: var(--shadow);
 }
 
+/* Inverted primary — brand yellow with navy text. For use ON dark navy
+   sections where a blue button would disappear (CTA band, footer, etc.). */
+.btn--primary-invert {
+  background: var(--brand-yellow);
+  color: var(--brand-yellow-ink);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn--primary-invert:hover {
+  background: var(--brand-yellow-hover);
+  box-shadow: var(--shadow);
+}
+
+/* Phone-pill blue — the brand-blue reference. White text keeps it distinct
+   from the yellow-text primary CTA when the two sit side by side. */
 .btn--navy {
-  background: var(--navy-700);
+  background: var(--brand-blue);
   color: #fff;
 }
 
 .btn--navy:hover {
-  background: var(--navy-600);
+  background: var(--brand-blue-hover);
 }
 
 .btn--ghost {
