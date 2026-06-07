@@ -65,6 +65,15 @@ All integration keys live in **`src/data/site.ts`** under `integrations`.
 
 ---
 
+## Known maintenance notes
+
+- **`npm audit` — 1 moderate (Astro `define:vars` XSS + server-island replay).**
+  Neither applies to this site's usage: the single `define:vars` call passes an
+  operator-controlled GA ID (never user input), and there are no server islands
+  (`output: 'static'`). The fix ships in Astro 6 (a breaking major), so it was
+  intentionally deferred. To patch when convenient: `npm install astro@^6` and
+  re-verify the build + a visual pass.
+
 ## How the integrations work
 
 ### Service-request form (no auto-scheduling — by design)
