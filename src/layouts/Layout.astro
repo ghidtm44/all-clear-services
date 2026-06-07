@@ -39,7 +39,7 @@ const jsonLd = {
   '@type': 'Plumber',
   name: site.name,
   description: site.blurb,
-  telephone: site.phoneDisplay,
+  telephone: site.phoneNumeric,
   url: new URL(withBase('/'), Astro.site).href,
   image: ogImageAbs,
   logo: logoAbs,

@@ -2,6 +2,7 @@
 import Logo from './Logo.astro';
 import Icon from './Icon.astro';
 import { site, nav } from '../data/site';
+import { services } from '../data/services';
 import { withBase } from '../lib/url';
 
 // Strip the configured base from the current path so active-state comparison
@@ -12,36 +13,57 @@ const isActive = (href: string) =>
   href === '/' ? path === '/' : path.startsWith(href);
 ---
 
-<!-- Emergency contact bar -->
-<div class="topbar">
-  <div class="container topbar__inner">
-    <span class="topbar__msg">
-      <Icon name="clock" size={16} /> 24/7 Emergency Service · One-Hour Response
-    </span>
-    <a class="topbar__phone" href={site.phoneHref}>
-      <Icon name="phone" size={16} /> {site.phoneDisplay}
-    </a>
-  </div>
-</div>
-
 <header class="header" data-header>
   <div class="container header__inner">
-    <Logo />
+    <Logo height={64} />
 
     <nav class="nav" aria-label="Primary">
       <ul class="nav__list">
         {
-          nav.map((item) => (
-            <li>
-              <a
-                href={withBase(item.href)}
-                class:list={['nav__link', { 'is-active': isActive(item.href) }]}
-                aria-current={isActive(item.href) ? 'page' : undefined}
-              >
-                {item.label}
-              </a>
-            </li>
-          ))
+          nav.map((item) =>
+            'hasMenu' in item && item.hasMenu ? (
+              <li class="nav__item nav__item--menu" data-nav-menu>
+                <button
+                  type="button"
+                  class:list={['nav__link nav__trigger', { 'is-active': isActive(item.href) }]}
+                  aria-expanded="false"
+                  aria-haspopup="true"
+                  data-menu-trigger
+                >
+                  {item.label}
+                  <Icon name="chevron" size={16} class="nav__caret" />
+                </button>
+                <div class="megamenu" data-menu-panel>
+                  <div class="megamenu__inner">
+                    {services.map((s) => (
+                      <a href={withBase(`/services/${s.slug}/`)} class="megamenu__item">
+                        <span class="megamenu__icon">
+                          <Icon name={s.icon} size={22} />
+                        </span>
+                        <span class="megamenu__text">
+                          <span class="megamenu__title">{s.title}</span>
+                          <span class="megamenu__sum">{s.summary}</span>
+                        </span>
+                      </a>
+                    ))}
+                  </div>
+                  <a href={withBase('/services/')} class="megamenu__all">
+                    View all services <Icon name="chevron" size={16} />
+                  </a>
+                </div>
+              </li>
+            ) : (
+              <li class="nav__item">
+                <a
+                  href={withBase(item.href)}
+                  class:list={['nav__link', { 'is-active': isActive(item.href) }]}
+                  aria-current={isActive(item.href) ? 'page' : undefined}
+                >
+                  {item.label}
+                </a>
+              </li>
+            )
+          )
         }
       </ul>
     </nav>
@@ -70,7 +92,7 @@ const isActive = (href: string) =>
 <div class="drawer" data-drawer hidden>
   <div class="drawer__panel">
     <div class="drawer__head">
-      <Logo />
+      <Logo height={56} />
       <button class="drawer__close" aria-label="Close menu" data-menu-close>
         <Icon name="close" size={26} />
       </button>
@@ -78,14 +100,38 @@ const isActive = (href: string) =>
     <nav aria-label="Mobile">
       <ul class="drawer__list">
         {
-          nav.map((item) => (
-            <li>
-              <a href={withBase(item.href)} class="drawer__link">
-                {item.label}
-                <Icon name="chevron" size={18} />
-              </a>
-            </li>
-          ))
+          nav.map((item) =>
+            'hasMenu' in item && item.hasMenu ? (
+              <li class="drawer__group" data-drawer-accordion>
+                <button type="button" class="drawer__link drawer__acc-trigger" aria-expanded="false" data-acc-trigger>
+                  {item.label}
+                  <Icon name="chevron" size={18} class="drawer__acc-caret" />
+                </button>
+                <ul class="drawer__sublist" data-acc-panel hidden>
+                  {services.map((s) => (
+                    <li>
+                      <a href={withBase(`/services/${s.slug}/`)} class="drawer__sublink">
+                        <Icon name={s.icon} size={18} />
+                        {s.title}
+                      </a>
+                    </li>
+                  ))}
+                  <li>
+                    <a href={withBase('/services/')} class="drawer__sublink drawer__sublink--all">
+                      View all services
+                    </a>
+                  </li>
+                </ul>
+              </li>
+            ) : (
+              <li>
+                <a href={withBase(item.href)} class="drawer__link">
+                  {item.label}
+                  <Icon name="chevron" size={18} />
+                </a>
+              </li>
+            )
+          )
         }
       </ul>
     </nav>
@@ -100,44 +146,20 @@ const isActive = (href: string) =>
 </div>
 
 <style>
-  .topbar {
-    background: var(--navy-900);
-    color: #c9d6e8;
-    font-size: var(--fs-small);
-  }
-  .topbar__inner {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding-block: 0.5rem;
-  }
-  .topbar__msg {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-weight: 500;
-  }
-  .topbar__phone {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    color: #fff;
-    font-weight: 600;
-  }
-  .topbar__phone:hover {
-    color: var(--copper-100);
-  }
-
   .header {
     position: sticky;
     top: 0;
     z-index: 100;
-    background: rgba(255, 255, 255, 0.88);
-    backdrop-filter: saturate(160%) blur(12px);
-    border-bottom: 1px solid var(--line);
-    transition: box-shadow 0.2s var(--ease);
+    /* Same surface as the hero — no color banding under the nav. */
+    background: color-mix(in srgb, var(--surface) 90%, transparent);
+    backdrop-filter: saturate(140%) blur(12px);
+    border-bottom: 1px solid transparent;
+    transition: box-shadow 0.2s var(--ease), border-color 0.2s var(--ease),
+      background 0.2s var(--ease);
   }
   .header.is-scrolled {
+    background: color-mix(in srgb, var(--surface) 96%, transparent);
+    border-bottom-color: var(--line);
     box-shadow: var(--shadow-sm);
   }
   .header__inner {
@@ -145,7 +167,7 @@ const isActive = (href: string) =>
     align-items: center;
     justify-content: space-between;
     gap: var(--sp-5);
-    padding-block: 0.8rem;
+    padding-block: 0.7rem;
   }
 
   .nav {
@@ -154,25 +176,131 @@ const isActive = (href: string) =>
   .nav__list {
     display: flex;
     align-items: center;
-    gap: 0.35rem;
+    gap: 0.25rem;
     list-style: none;
     padding: 0;
   }
+  .nav__item {
+    position: relative;
+  }
   .nav__link {
-    display: inline-block;
-    padding: 0.5rem 0.85rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.55rem 0.9rem;
     border-radius: var(--radius-pill);
+    font-family: var(--font-sans);
+    font-size: var(--fs-body);
     font-weight: 500;
     color: var(--ink-700);
+    background: none;
+    border: none;
+    cursor: pointer;
     transition: color 0.15s var(--ease), background 0.15s var(--ease);
   }
   .nav__link:hover {
     color: var(--navy-900);
-    background: var(--navy-050);
+    background: rgba(27, 58, 102, 0.06);
   }
   .nav__link.is-active {
     color: var(--navy-900);
     font-weight: 600;
+  }
+  .nav__caret {
+    transition: transform 0.2s var(--ease);
+  }
+
+  /* Mega menu (desktop) */
+  .megamenu {
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    left: 0;
+    width: 480px;
+    max-width: 90vw;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    padding: var(--sp-3);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(6px);
+    transition: opacity 0.18s var(--ease), transform 0.18s var(--ease),
+      visibility 0.18s var(--ease);
+    z-index: 120;
+  }
+  /* Reveal on hover, keyboard focus-within, or explicit open state. */
+  .nav__item--menu:hover .megamenu,
+  .nav__item--menu:focus-within .megamenu,
+  .nav__item--menu.is-open .megamenu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+  .nav__item--menu:hover .nav__caret,
+  .nav__item--menu.is-open .nav__caret {
+    transform: rotate(90deg);
+  }
+  .megamenu__inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+  }
+  .megamenu__item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.7rem;
+    padding: 0.7rem;
+    border-radius: var(--radius);
+    transition: background 0.15s var(--ease);
+  }
+  .megamenu__item:hover {
+    background: var(--navy-050);
+  }
+  .megamenu__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    border-radius: var(--radius-sm);
+    background: var(--navy-050);
+    color: var(--navy-700);
+  }
+  .megamenu__item:hover .megamenu__icon {
+    background: var(--copper-100);
+    color: var(--copper-700);
+  }
+  .megamenu__text {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+  .megamenu__title {
+    font-weight: 600;
+    color: var(--ink-900);
+    font-size: var(--fs-small);
+  }
+  .megamenu__sum {
+    font-size: 0.8rem;
+    color: var(--ink-500);
+    line-height: 1.4;
+  }
+  .megamenu__all {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.3rem;
+    margin-top: var(--sp-2);
+    padding: 0.7rem;
+    border-top: 1px solid var(--line);
+    font-weight: 600;
+    font-size: var(--fs-small);
+    color: var(--copper-600);
+  }
+  .megamenu__all:hover {
+    color: var(--copper-700);
   }
 
   .header__cta {
@@ -210,7 +338,7 @@ const isActive = (href: string) =>
   .drawer__panel {
     position: absolute;
     inset: 0 0 0 auto;
-    width: min(86vw, 360px);
+    width: min(88vw, 380px);
     background: var(--paper);
     padding: var(--sp-5);
     display: flex;
@@ -219,6 +347,7 @@ const isActive = (href: string) =>
     box-shadow: var(--shadow-lg);
     transform: translateX(100%);
     transition: transform 0.28s var(--ease);
+    overflow-y: auto;
   }
   .drawer.is-open .drawer__panel {
     transform: none;
@@ -246,14 +375,49 @@ const isActive = (href: string) =>
     display: flex;
     align-items: center;
     justify-content: space-between;
+    width: 100%;
     padding: 0.9rem 0.5rem;
+    font-family: var(--font-sans);
     font-size: 1.15rem;
     font-weight: 500;
     color: var(--ink-900);
+    background: none;
+    border: none;
     border-bottom: 1px solid var(--line);
+    cursor: pointer;
+    text-align: left;
   }
   .drawer__link :global(.icon) {
     color: var(--ink-300);
+  }
+  .drawer__acc-caret {
+    transition: transform 0.2s var(--ease);
+  }
+  .drawer__group.is-open .drawer__acc-caret {
+    transform: rotate(90deg);
+  }
+  .drawer__sublist {
+    list-style: none;
+    padding: 0.25rem 0 0.5rem;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  .drawer__sublink {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.7rem 0.5rem 0.7rem 1rem;
+    font-size: 1rem;
+    color: var(--ink-700);
+  }
+  .drawer__sublink :global(.icon) {
+    color: var(--copper-600);
+  }
+  .drawer__sublink--all {
+    font-weight: 600;
+    color: var(--copper-600);
+    padding-left: 1rem;
   }
   .drawer__actions {
     display: flex;
@@ -287,18 +451,39 @@ const isActive = (href: string) =>
 </style>
 
 <script>
-  // Sticky header shadow on scroll
+  // ---- Sticky header shadow on scroll ----
   const header = document.querySelector('[data-header]');
   const onScroll = () =>
     header?.classList.toggle('is-scrolled', window.scrollY > 8);
   onScroll();
   window.addEventListener('scroll', onScroll, { passive: true });
 
-  // Mobile drawer
+  // ---- Desktop Services mega-menu (click/keyboard toggle; CSS handles hover) ----
+  const menuItem = document.querySelector('[data-nav-menu]') as HTMLElement | null;
+  const menuTrigger = menuItem?.querySelector('[data-menu-trigger]') as HTMLButtonElement | null;
+  if (menuItem && menuTrigger) {
+    const closeMenu = () => {
+      menuItem.classList.remove('is-open');
+      menuTrigger.setAttribute('aria-expanded', 'false');
+    };
+    menuTrigger.addEventListener('click', (e) => {
+      e.preventDefault();
+      const open = menuItem.classList.toggle('is-open');
+      menuTrigger.setAttribute('aria-expanded', String(open));
+    });
+    // Close on outside click or Escape.
+    document.addEventListener('click', (e) => {
+      if (!menuItem.contains(e.target as Node)) closeMenu();
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeMenu();
+    });
+  }
+
+  // ---- Mobile drawer ----
   const drawer = document.querySelector('[data-drawer]') as HTMLElement | null;
   const toggle = document.querySelector('[data-menu-toggle]');
   const closeBtn = document.querySelector('[data-menu-close]');
-
   const panel = drawer?.querySelector('.drawer__panel') as HTMLElement | null;
   const main = document.getElementById('main');
 
@@ -308,9 +493,7 @@ const isActive = (href: string) =>
     requestAnimationFrame(() => drawer.classList.add('is-open'));
     toggle?.setAttribute('aria-expanded', 'true');
     document.body.style.overflow = 'hidden';
-    // Hide the rest of the page from AT + tab order while the drawer is open.
     main?.setAttribute('inert', '');
-    // Move focus into the drawer (the close button).
     (closeBtn as HTMLElement | null)?.focus();
   };
   const close = () => {
@@ -320,19 +503,19 @@ const isActive = (href: string) =>
     document.body.style.overflow = '';
     main?.removeAttribute('inert');
     setTimeout(() => (drawer.hidden = true), 280);
-    // Restore focus to the control that opened the drawer.
     (toggle as HTMLElement | null)?.focus();
   };
 
-  // Trap Tab within the drawer panel while open.
   const trapFocus = (e: KeyboardEvent) => {
     if (e.key !== 'Tab' || !panel || drawer?.hidden) return;
     const focusable = panel.querySelectorAll<HTMLElement>(
       'a[href], button:not([disabled]), input, [tabindex]:not([tabindex="-1"])'
     );
-    if (!focusable.length) return;
-    const first = focusable[0];
-    const last = focusable[focusable.length - 1];
+    // Skip elements inside a collapsed accordion (hidden sub-list).
+    const visible = Array.from(focusable).filter((el) => el.offsetParent !== null);
+    if (!visible.length) return;
+    const first = visible[0];
+    const last = visible[visible.length - 1];
     if (e.shiftKey && document.activeElement === first) {
       e.preventDefault();
       last.focus();
@@ -351,7 +534,20 @@ const isActive = (href: string) =>
     if (e.key === 'Escape' && drawer && !drawer.hidden) close();
     trapFocus(e);
   });
-  // Close drawer when a link is tapped
+
+  // ---- Mobile drawer Services accordion ----
+  const acc = drawer?.querySelector('[data-drawer-accordion]') as HTMLElement | null;
+  const accTrigger = acc?.querySelector('[data-acc-trigger]') as HTMLButtonElement | null;
+  const accPanel = acc?.querySelector('[data-acc-panel]') as HTMLElement | null;
+  if (acc && accTrigger && accPanel) {
+    accTrigger.addEventListener('click', () => {
+      const isOpen = acc.classList.toggle('is-open');
+      accTrigger.setAttribute('aria-expanded', String(isOpen));
+      accPanel.hidden = !isOpen;
+    });
+  }
+
+  // Close drawer when an actual navigation link (not the accordion toggle) is tapped.
   drawer?.querySelectorAll('a').forEach((a) =>
     a.addEventListener('click', close)
   );

@@ -1,0 +1,232 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import CTABand from '../../components/CTABand.astro';
+import Icon from '../../components/Icon.astro';
+import { services } from '../../data/services';
+import { site } from '../../data/site';
+import { withBase } from '../../lib/url';
+
+// One static page per service. Astro pre-renders all of these at build time.
+export function getStaticPaths() {
+  return services.map((service) => ({
+    params: { slug: service.slug },
+    props: { service },
+  }));
+}
+
+const { service } = Astro.props;
+// Sibling services for the "explore more" rail at the bottom.
+const others = services.filter((s) => s.slug !== service.slug);
+---
+
+<Layout
+  title={service.title}
+  description={service.summary}
+>
+  <PageHeader eyebrow="Our services" title={service.title} text={service.description} />
+
+  <section class="section">
+    <div class="container svc">
+      <div class="svc__main reveal">
+        <h2 class="svc__h2">What we handle</h2>
+        <ul class="svc__list">
+          {
+            service.items.map((item) => (
+              <li>
+                <Icon name="check" size={18} />
+                {item}
+              </li>
+            ))
+          }
+        </ul>
+
+        <div class="svc__assure">
+          <span class="svc__assure-item"><Icon name="shield" size={18} /> Licensed & insured</span>
+          <span class="svc__assure-item"><Icon name="wrench" size={18} /> Flat per-job pricing</span>
+          <span class="svc__assure-item"><Icon name="check" size={18} /> Free estimates</span>
+        </div>
+      </div>
+
+      <aside class="svc__cta reveal">
+        <h3 class="svc__cta-title">Need {service.title.toLowerCase()} help?</h3>
+        <p class="svc__cta-text">
+          Call now for a free estimate, or send a request and we’ll reach out to
+          schedule a time that works for you.
+        </p>
+        <div class="svc__cta-actions">
+          <a href={site.phoneHref} class="btn btn--primary btn--lg">
+            <Icon name="phone" size={18} /> {site.phoneDisplay}
+          </a>
+          <a href={withBase('/contact/')} class="btn btn--ghost">Request Service</a>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- Explore other services -->
+  <section class="section section--warm">
+    <div class="container">
+      <div class="section-head reveal">
+        <p class="eyebrow">More from All Clear</p>
+        <h2>Other services</h2>
+      </div>
+      <div class="svc__others">
+        {
+          others.map((s) => (
+            <a href={withBase(`/services/${s.slug}/`)} class="svc__other reveal">
+              <span class="svc__other-icon">
+                <Icon name={s.icon} size={22} />
+              </span>
+              <span class="svc__other-title">{s.title}</span>
+              <Icon name="chevron" size={16} class="svc__other-caret" />
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <CTABand />
+</Layout>
+
+<style>
+  .svc {
+    display: grid;
+    grid-template-columns: 1.4fr 0.8fr;
+    gap: var(--sp-8);
+    align-items: start;
+  }
+  .svc__h2 {
+    font-size: var(--fs-h3);
+    margin-bottom: var(--sp-4);
+  }
+  .svc__list {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.7rem 1.5rem;
+  }
+  .svc__list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.55rem;
+    color: var(--ink-700);
+  }
+  .svc__list :global(.icon) {
+    color: var(--success-600);
+    margin-top: 3px;
+  }
+  .svc__assure {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-4);
+    margin-top: var(--sp-6);
+    padding-top: var(--sp-5);
+    border-top: 1px solid var(--line);
+  }
+  .svc__assure-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: var(--fs-small);
+    font-weight: 600;
+    color: var(--navy-700);
+  }
+
+  .svc__cta {
+    background: var(--navy-900);
+    color: #d7e0ee;
+    border-radius: var(--radius-lg);
+    padding: var(--sp-6);
+    box-shadow: var(--shadow-lg);
+    position: sticky;
+    top: 100px;
+  }
+  .svc__cta-title {
+    color: #fff;
+    margin-bottom: var(--sp-3);
+  }
+  .svc__cta-text {
+    font-size: var(--fs-small);
+    line-height: 1.6;
+  }
+  .svc__cta-actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-3);
+    margin-top: var(--sp-5);
+  }
+  .svc__cta-actions .btn--ghost {
+    color: #cdd9ea;
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+  .svc__cta-actions .btn--ghost:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.4);
+  }
+
+  .svc__others {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--sp-4);
+  }
+  .svc__other {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding: var(--sp-4);
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    transition: transform 0.18s var(--ease), box-shadow 0.18s var(--ease),
+      border-color 0.18s var(--ease);
+  }
+  .svc__other:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow);
+    border-color: transparent;
+  }
+  .svc__other-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    border-radius: var(--radius-sm);
+    background: var(--navy-050);
+    color: var(--navy-700);
+  }
+  .svc__other-title {
+    font-weight: 600;
+    color: var(--ink-900);
+    font-size: var(--fs-small);
+  }
+  .svc__other-caret {
+    margin-left: auto;
+    color: var(--ink-300);
+  }
+
+  @media (max-width: 880px) {
+    .svc {
+      grid-template-columns: 1fr;
+      gap: var(--sp-6);
+    }
+    .svc__cta {
+      position: static;
+    }
+    .svc__others {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  @media (max-width: 560px) {
+    .svc__list {
+      grid-template-columns: 1fr;
+    }
+    .svc__others {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

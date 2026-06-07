@@ -15,13 +15,13 @@ import { withBase } from '../lib/url';
       <p class="lead hero__lead">
         From a dripping faucet to a flooded basement at 2 a.m., All Clear
         Services answers the call — with honest pricing, guaranteed
-        workmanship, and one-hour emergency response, 24/7.
+        workmanship, and one-hour emergency response.
       </p>
       <div class="hero__actions">
         <a href={withBase('/contact/')} class="btn btn--primary btn--lg">
           Request Service
         </a>
-        <a href={site.phoneHref} class="btn btn--on-navy btn--lg">
+        <a href={site.phoneHref} class="btn btn--navy btn--lg">
           <Icon name="phone" size={18} /> {site.phoneDisplay}
         </a>
       </div>
@@ -59,37 +59,37 @@ import { withBase } from '../lib/url';
 <style>
   .hero {
     position: relative;
-    background: var(--navy-900);
-    color: #e3ebf6;
+    /* Shares the header's surface so there is no color banding under the nav. */
+    background: var(--surface);
+    color: var(--ink-700);
     overflow: hidden;
   }
-  /* layered radial + linear wash, no stock image dependency */
+  /* Light blueprint wash — copper warmth top-right, navy cool bottom-left. */
   .hero__bg {
     position: absolute;
     inset: 0;
     background:
       radial-gradient(
-        60% 80% at 85% 10%,
-        rgba(207, 116, 64, 0.22),
+        55% 75% at 88% 0%,
+        rgba(207, 116, 64, 0.12),
         transparent 60%
       ),
       radial-gradient(
-        50% 60% at 0% 100%,
-        rgba(36, 74, 128, 0.6),
+        50% 70% at -5% 110%,
+        rgba(36, 74, 128, 0.1),
         transparent 60%
-      ),
-      linear-gradient(160deg, var(--navy-900), var(--navy-800));
+      );
   }
   .hero__bg::after {
-    /* faint blueprint grid */
+    /* faint blueprint grid in navy */
     content: '';
     position: absolute;
     inset: 0;
     background-image:
-      linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+      linear-gradient(rgba(27, 58, 102, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(27, 58, 102, 0.05) 1px, transparent 1px);
     background-size: 48px 48px;
-    mask-image: radial-gradient(80% 80% at 50% 30%, #000, transparent 80%);
+    mask-image: radial-gradient(85% 85% at 50% 25%, #000, transparent 85%);
   }
   .hero__inner {
     position: relative;
@@ -97,18 +97,15 @@ import { withBase } from '../lib/url';
     grid-template-columns: 1.3fr 0.9fr;
     gap: var(--sp-8);
     align-items: center;
-    padding-block: clamp(3.5rem, 2rem + 8vw, 7rem);
-  }
-  .hero__eyebrow {
-    color: var(--copper-500);
+    padding-block: clamp(3rem, 1.5rem + 7vw, 6rem);
   }
   .hero__title {
-    color: #fff;
+    color: var(--ink-900);
     font-size: var(--fs-hero);
     margin-bottom: var(--sp-5);
   }
   .hero__lead {
-    color: #c4d1e4;
+    color: var(--ink-700);
     max-width: 52ch;
     margin-bottom: var(--sp-6);
   }
@@ -130,18 +127,17 @@ import { withBase } from '../lib/url';
     align-items: center;
     gap: 0.6rem;
     font-size: var(--fs-small);
-    color: #cdd9ea;
+    color: var(--ink-700);
   }
   .hero__assurances :global(.icon) {
-    color: var(--copper-500);
+    color: var(--copper-600);
   }
 
   .hero__card {
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: var(--paper);
+    border: 1px solid var(--line);
     border-radius: var(--radius-lg);
     padding: var(--sp-6);
-    backdrop-filter: blur(8px);
     box-shadow: var(--shadow-lg);
   }
   .hero__stars {
@@ -152,37 +148,37 @@ import { withBase } from '../lib/url';
   .hero__card-head {
     font-family: var(--font-display);
     font-size: 1.5rem;
-    color: #fff;
+    color: var(--ink-900);
     margin-top: 0.5rem;
   }
   .hero__card-sub {
     font-size: var(--fs-small);
-    color: #b6c4da;
+    color: var(--ink-500);
   }
   .hero__quote {
     margin: var(--sp-5) 0;
     padding-top: var(--sp-5);
-    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    border-top: 1px solid var(--line);
     font-size: var(--fs-small);
     line-height: 1.6;
-    color: #dbe5f2;
+    color: var(--ink-900);
   }
   .hero__quote cite {
     display: block;
     margin-top: 0.6rem;
     font-style: normal;
-    color: #95a6c0;
+    color: var(--ink-500);
   }
   .hero__card-link {
     display: inline-flex;
     align-items: center;
     gap: 0.3rem;
-    color: var(--copper-500);
+    color: var(--copper-600);
     font-weight: 600;
     font-size: var(--fs-small);
   }
   .hero__card-link:hover {
-    color: var(--copper-100);
+    color: var(--copper-700);
   }
 
   @media (max-width: 880px) {

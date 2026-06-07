@@ -31,13 +31,10 @@ const { service, detailed = false } = Astro.props;
     )
   }
 
-  {
-    !detailed && (
-      <a href={withBase('/services/')} class="card__link">
-        Learn more <Icon name="chevron" size={16} />
-      </a>
-    )
-  }
+  <a href={withBase(`/services/${service.slug}/`)} class="card__link">
+    {detailed ? `Explore ${service.title}` : 'Learn more'}
+    <Icon name="chevron" size={16} />
+  </a>
 </article>
 
 <style>

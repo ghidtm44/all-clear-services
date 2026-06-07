@@ -26,6 +26,7 @@
 
   --paper: #ffffff;
   --paper-warm: #fbfaf8; /* warm off-white section bg */
+  --surface: #f4f6fa; /* unified header + hero surface (cool light) */
   --line: #e4e8ee; /* hairline borders */
 
   --success-600: #2f7d54;

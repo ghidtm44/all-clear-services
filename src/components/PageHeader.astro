@@ -19,31 +19,39 @@ const { eyebrow, title, text } = Astro.props;
 <style>
   .pagehead {
     position: relative;
-    background: var(--navy-900);
-    color: #d7e0ee;
+    /* Shares the header/hero surface — seamless under the nav, no banding. */
+    background: var(--surface);
+    color: var(--ink-700);
     overflow: hidden;
+    border-bottom: 1px solid var(--line);
   }
   .pagehead__bg {
     position: absolute;
     inset: 0;
     background:
-      radial-gradient(50% 70% at 90% 0%, rgba(207, 116, 64, 0.18), transparent 60%),
-      linear-gradient(160deg, var(--navy-900), var(--navy-800));
+      radial-gradient(50% 70% at 92% 0%, rgba(207, 116, 64, 0.1), transparent 60%);
+  }
+  .pagehead__bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(27, 58, 102, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(27, 58, 102, 0.05) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: radial-gradient(85% 90% at 30% 0%, #000, transparent 80%);
   }
   .pagehead__inner {
     position: relative;
     padding-block: clamp(3rem, 2rem + 5vw, 5rem);
     max-width: 64ch;
   }
-  .pagehead__eyebrow {
-    color: var(--copper-500);
-  }
   .pagehead__title {
-    color: #fff;
+    color: var(--ink-900);
     font-size: var(--fs-h1);
   }
   .pagehead__text {
-    color: #c4d1e4;
+    color: var(--ink-700);
     margin-top: var(--sp-4);
   }
 </style>

@@ -15,9 +15,11 @@ export const site = {
     'Licensed plumbing, heating, and cooling for homes and businesses across central New Jersey — done right, the first time.',
 
   // ---- Contact -----------------------------------------------------------
-  phoneDisplay: '609-642-5327',
-  // Vanity spelling from the logo (609-64-CLEAR); shown where there's room.
-  phoneVanity: '609-64-CLEAR',
+  // What customers SEE is the vanity spelling (609-64-CLEAR). A tap still
+  // dials the real number via phoneHref. phoneNumeric is the plain digits for
+  // structured data (JSON-LD) where a vanity string isn't appropriate.
+  phoneDisplay: '609-64-CLEAR',
+  phoneNumeric: '609-642-5327',
   phoneHref: 'tel:+16096425327',
   // TODO: confirm the real inbox the service-request form should reach.
   email: 'office@allclearservices.com',
@@ -31,8 +33,8 @@ export const site = {
     state: 'NJ',
   },
 
-  hours: '24 hours a day, 7 days a week — including holidays',
-  emergencyLine: '24/7 emergency service with one-hour response',
+  hours: 'Open 7 days a week — emergency service available',
+  emergencyLine: 'Emergency service available with one-hour response',
 
   // ---- Social / external profiles (optional; hidden when empty) ----------
   social: {
@@ -69,10 +71,13 @@ export const site = {
   },
 } as const;
 
-/** Primary navigation — order matters. */
+/**
+ * Primary navigation — order matters.
+ * `hasMenu` flags the Services item, which renders as a dropdown of individual
+ * services (hover on desktop, tap-to-expand on mobile) instead of a plain link.
+ */
 export const nav = [
-  { label: 'Services', href: '/services/' },
-  { label: 'Service Areas', href: '/service-areas/' },
+  { label: 'Services', href: '/services/', hasMenu: true },
   { label: 'Reviews', href: '/reviews/' },
   { label: 'About', href: '/about/' },
   { label: 'Contact', href: '/contact/' },
