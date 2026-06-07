@@ -53,7 +53,7 @@ export const site = {
 
     // GA4 Measurement ID, e.g. "G-XXXXXXXXXX". Analytics only loads when this
     // is a real ID (not this placeholder), so dev/preview stays clean.
-    gaMeasurementId: 'G-XXXXXXXXXX',
+    gaMeasurementId: 'G-HGRE056LPY',
 
     // Optional HousecallPro hosted "Book Online" link. When set, a secondary
     // "Book Online" CTA appears. Pattern:
