@@ -21,9 +21,9 @@ export const site = {
   phoneDisplay: '609-64-CLEAR',
   phoneNumeric: '609-642-5327',
   phoneHref: 'tel:+16096425327',
-  // TODO: confirm the real inbox the service-request form should reach.
-  email: 'office@allclearservices.com',
-  emailHref: 'mailto:office@allclearservices.com',
+  // Working inbox that receives service requests (Web3Forms is keyed to it).
+  email: 'njallclearservices@gmail.com',
+  emailHref: 'mailto:njallclearservices@gmail.com',
 
   // The current site lists no street address; service is dispatched across a
   // wide area. Update if a storefront/office address should be published.
@@ -46,10 +46,10 @@ export const site = {
 
   // ---- Integrations ------------------------------------------------------
   integrations: {
-    // Web3Forms access key. Create a free key at https://web3forms.com and
-    // associate it with the company inbox above. The form ships disabled-safe
-    // until this is set to a real key.
-    web3formsAccessKey: 'YOUR_WEB3FORMS_ACCESS_KEY',
+    // Web3Forms access key — keyed to njallclearservices@gmail.com, which is
+    // where service requests are delivered. (Web3Forms sends to whatever inbox
+    // verified this key, not to a value in this file.)
+    web3formsAccessKey: 'dc47156b-4f89-4a8b-b492-a420ac245aee',
 
     // GA4 Measurement ID, e.g. "G-XXXXXXXXXX". Analytics only loads when this
     // is a real ID (not this placeholder), so dev/preview stays clean.
