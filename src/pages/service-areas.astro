@@ -4,6 +4,7 @@ import PageHeader from '../components/PageHeader.astro';
 import CTABand from '../components/CTABand.astro';
 import Icon from '../components/Icon.astro';
 import { serviceAreas, serviceAreaIntro } from '../data/service-areas';
+import { site } from '../data/site';
 ---
 
 <Layout
@@ -31,7 +32,7 @@ import { serviceAreas, serviceAreaIntro } from '../data/service-areas';
 
       <p class="areas__note reveal">
         Don’t see your town? We likely still cover you — give us a call at
-        <a href="tel:+18004052505">800-405-2505</a> to check.
+        <a href={site.phoneHref}>{site.phoneDisplay}</a> to check.
       </p>
     </div>
   </section>

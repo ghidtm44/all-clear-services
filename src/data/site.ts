@@ -15,8 +15,10 @@ export const site = {
     'Licensed plumbing, heating, and cooling for homes and businesses across central New Jersey — done right, the first time.',
 
   // ---- Contact -----------------------------------------------------------
-  phoneDisplay: '800-405-2505',
-  phoneHref: 'tel:+18004052505',
+  phoneDisplay: '609-642-5327',
+  // Vanity spelling from the logo (609-64-CLEAR); shown where there's room.
+  phoneVanity: '609-64-CLEAR',
+  phoneHref: 'tel:+16096425327',
   // TODO: confirm the real inbox the service-request form should reach.
   email: 'office@allclearservices.com',
   emailHref: 'mailto:office@allclearservices.com',

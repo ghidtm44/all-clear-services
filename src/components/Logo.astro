@@ -1,80 +1,54 @@
 ---
 /**
- * Brand lockup.
+ * Brand lockup — the real All Clear Services mascot + wordmark logo.
  *
- * LOGO SWAP POINT — when Todd's logo file lands in src/assets/, replace the
- * inline SVG wordmark below with an <Image> import. Keep the same outer <a>
- * wrapper and the `variant` prop so header/footer placement stays consistent.
+ * Two source variants (generated from the supplied artwork, see process-logo.mjs):
+ *   - logo-lockup-dark.png  → navy wordmark, for LIGHT backgrounds (header)
+ *   - logo-lockup-light.png → white wordmark, for DARK backgrounds (footer, drawer)
  *
- *   import { Image } from 'astro:assets';
- *   import logo from '../assets/all-clear-logo.svg';
- *   ...
- *   <Image src={logo} alt="All Clear Services" height={40} />
- *
- * The wordmark below is a tasteful placeholder, NOT AI clip-art: a custom
- * "droplet-check" mark + serif wordmark in the brand palette.
+ * Astro's <Image> optimizes/serves these as needed. `height` keeps the lockup
+ * crisp; width is auto from the intrinsic aspect ratio.
  */
+import { Image } from 'astro:assets';
+import lockupDark from '../assets/logo-lockup-dark.png';
+import lockupLight from '../assets/logo-lockup-light.png';
+
 interface Props {
   variant?: 'dark' | 'light';
   class?: string;
+  height?: number;
 }
-const { variant = 'dark', class: className = '' } = Astro.props;
-const titleColor = variant === 'light' ? '#ffffff' : 'var(--navy-900)';
-const subColor = variant === 'light' ? 'rgba(255,255,255,.7)' : 'var(--ink-500)';
+const { variant = 'dark', class: className = '', height = 52 } = Astro.props;
+// `variant` = desired wordmark color (matches call sites): 'light' → white
+// wordmark for dark backgrounds (footer/drawer); 'dark' → navy wordmark for
+// light backgrounds (header).
+const src = variant === 'light' ? lockupLight : lockupDark;
 ---
 
 <a href="/" class={`logo ${className}`} aria-label="All Clear Services — home">
-  <span class="logo__mark" aria-hidden="true">
-    <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
-      <rect width="40" height="40" rx="10" fill="var(--navy-700)" />
-      <!-- droplet -->
-      <path
-        d="M20 9c3.4 4 5.1 6.8 5.1 9.2A5.1 5.1 0 0 1 20 23.3a5.1 5.1 0 0 1-5.1-5.1C14.9 15.8 16.6 13 20 9Z"
-        fill="var(--copper-500)"
-      />
-      <!-- clear check inside droplet -->
-      <path
-        d="m17.4 17.8 1.9 1.9 3.6-3.8"
-        stroke="#fff"
-        stroke-width="1.8"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      />
-    </svg>
-  </span>
-  <span class="logo__type">
-    <span class="logo__title" style={`color:${titleColor}`}>All Clear</span>
-    <span class="logo__sub" style={`color:${subColor}`}>SERVICES</span>
-  </span>
+  <Image
+    src={src}
+    alt="All Clear Services"
+    height={height}
+    densities={[1.5, 2]}
+    loading="eager"
+    class="logo__img"
+  />
 </a>
 
 <style>
   .logo {
     display: inline-flex;
     align-items: center;
-    gap: 0.65rem;
   }
-  .logo__mark {
-    display: inline-flex;
-    border-radius: 10px;
-    box-shadow: var(--shadow-sm);
+  .logo__img {
+    width: auto;
+    height: 52px;
+    display: block;
   }
-  .logo__type {
-    display: flex;
-    flex-direction: column;
-    line-height: 1;
-  }
-  .logo__title {
-    font-family: var(--font-display);
-    font-weight: 600;
-    font-size: 1.4rem;
-    letter-spacing: -0.01em;
-  }
-  .logo__sub {
-    font-family: var(--font-sans);
-    font-weight: 600;
-    font-size: 0.7rem;
-    letter-spacing: 0.28em;
-    margin-top: 2px;
+  @media (max-width: 560px) {
+    .logo__img {
+      height: 44px;
+    }
   }
 </style>

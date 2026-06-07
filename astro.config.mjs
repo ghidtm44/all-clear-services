@@ -2,12 +2,10 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 
-// NOTE: `site` should be set to the final production domain once DNS/hosting
-// is configured on GoDaddy. It drives canonical URLs, sitemap, and OG tags.
-// The company currently owns allclearplumbingandheating.com — update if the
-// new domain differs.
+// `site` drives canonical URLs, sitemap, and OG tags. Production domain is
+// allclearservices.com (GoDaddy) — DNS/hosting configured as the final step.
 export default defineConfig({
-  site: 'https://allclearplumbingandheating.com',
+  site: 'https://allclearservices.com',
   output: 'static',
   integrations: [sitemap()],
   build: {
