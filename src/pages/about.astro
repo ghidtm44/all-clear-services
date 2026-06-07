@@ -62,25 +62,6 @@ const values = [
           we’re the team your neighbors keep calling back.
         </p>
       </div>
-
-      <aside class="about__stats reveal">
-        <div class="about__stat">
-          <span class="about__stat-num">150+</span>
-          <span class="about__stat-label">Five-star reviews on Angi</span>
-        </div>
-        <div class="about__stat">
-          <span class="about__stat-num">7-Day</span>
-          <span class="about__stat-label">Emergency service, including holidays</span>
-        </div>
-        <div class="about__stat">
-          <span class="about__stat-num">1-Hour</span>
-          <span class="about__stat-label">Emergency response time</span>
-        </div>
-        <div class="about__badges">
-          <span><Icon name="shield" size={16} /> Licensed & Insured</span>
-          <span><Icon name="globe" size={16} /> Hablamos Español</span>
-        </div>
-      </aside>
     </div>
   </section>
 
@@ -114,49 +95,10 @@ const values = [
 
 <style>
   .about__lede {
-    display: grid;
-    grid-template-columns: 1.4fr 0.8fr;
-    gap: var(--sp-8);
-    align-items: start;
+    max-width: 70ch;
   }
   .about__lede p {
     margin-top: var(--sp-4);
-  }
-  .about__stats {
-    background: var(--navy-050);
-    border: 1px solid var(--navy-100);
-    border-radius: var(--radius-lg);
-    padding: var(--sp-6);
-    display: flex;
-    flex-direction: column;
-    gap: var(--sp-5);
-  }
-  .about__stat-num {
-    display: block;
-    font-family: var(--font-display);
-    font-size: 2.4rem;
-    font-weight: 600;
-    color: var(--navy-700);
-    line-height: 1;
-  }
-  .about__stat-label {
-    font-size: var(--fs-small);
-    color: var(--ink-500);
-  }
-  .about__badges {
-    display: flex;
-    flex-direction: column;
-    gap: 0.6rem;
-    padding-top: var(--sp-5);
-    border-top: 1px solid var(--navy-100);
-  }
-  .about__badges span {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: var(--fs-small);
-    font-weight: 600;
-    color: var(--navy-700);
   }
 
   .values {
@@ -192,9 +134,6 @@ const values = [
   }
 
   @media (max-width: 880px) {
-    .about__lede {
-      grid-template-columns: 1fr;
-    }
     .values {
       grid-template-columns: 1fr 1fr;
     }
