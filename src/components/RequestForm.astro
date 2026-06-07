@@ -125,15 +125,38 @@ const formReady = !!accessKey && accessKey !== 'YOUR_WEB3FORMS_ACCESS_KEY';
 
         <!-- Availability picker -->
         <fieldset class="availability">
-          <legend>Preferred day & time</legend>
+          <legend>Preferred day &amp; time</legend>
           <p class="availability__help">
-            Choose what works best — we’ll confirm the exact time when we reach
-            out. These are requests, not confirmed bookings.
+            Pick a date, then choose any times that work for you. We’ll confirm
+            the exact appointment when we reach out — these are requests, not
+            confirmed bookings.
           </p>
 
-          <div class="availability__days" data-days role="group" aria-label="Preferred day"></div>
+          <!-- Month calendar (single date) -->
+          <p class="availability__sublabel">Preferred date</p>
+          <div class="cal" data-cal>
+            <div class="cal__head">
+              <button type="button" class="cal__nav" data-cal-prev aria-label="Previous month">
+                <Icon name="chevron" size={18} class="cal__nav-prev" />
+              </button>
+              <span class="cal__title" data-cal-title aria-live="polite"></span>
+              <button type="button" class="cal__nav" data-cal-next aria-label="Next month">
+                <Icon name="chevron" size={18} />
+              </button>
+            </div>
+            <div class="cal__dow" aria-hidden="true">
+              <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span>
+              <span>Thu</span><span>Fri</span><span>Sat</span>
+            </div>
+            <div class="cal__grid" data-cal-grid role="group" aria-label="Choose a preferred date"></div>
+          </div>
 
-          <div class="availability__windows" data-windows role="group" aria-label="Preferred time window">
+          <!-- Time windows (multi-select) -->
+          <p class="availability__sublabel">
+            Preferred time of day
+            <span class="availability__multi">— choose all that work</span>
+          </p>
+          <div class="availability__windows" data-windows role="group" aria-label="Preferred time windows">
             <button type="button" class="slot" data-window="Morning (8am–12pm)" aria-pressed="false">
               Morning<span>8am – 12pm</span>
             </button>
@@ -312,56 +335,117 @@ const formReady = !!accessKey && accessKey !== 'YOUR_WEB3FORMS_ACCESS_KEY';
     color: var(--ink-500);
     margin-bottom: var(--sp-4);
   }
-  .availability__days {
-    display: flex;
-    gap: 0.5rem;
-    overflow-x: auto;
-    padding-bottom: 0.5rem;
-    margin-bottom: var(--sp-4);
-    scrollbar-width: thin;
+  .availability__sublabel {
+    font-size: var(--fs-small);
+    font-weight: 700;
+    color: var(--ink-900);
+    margin-bottom: var(--sp-3);
   }
-  .day {
-    flex: 0 0 auto;
-    min-width: 64px;
-    text-align: center;
-    padding: 0.5rem 0.6rem;
+  .availability__multi {
+    font-weight: 400;
+    color: var(--ink-500);
+  }
+
+  /* Month calendar */
+  .cal {
+    border: 1.5px solid var(--line);
+    border-radius: var(--radius);
+    padding: var(--sp-4);
+    margin-bottom: var(--sp-5);
+    background: var(--paper);
+  }
+  .cal__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--sp-3);
+  }
+  .cal__title {
+    font-weight: 700;
+    color: var(--ink-900);
+    font-size: var(--fs-body);
+  }
+  .cal__nav {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
     border: 1.5px solid var(--line);
     border-radius: var(--radius-sm);
     background: var(--paper);
+    color: var(--navy-700);
     cursor: pointer;
-    transition: all 0.15s var(--ease);
-    font-family: inherit;
+    transition: border-color 0.15s var(--ease), background 0.15s var(--ease),
+      opacity 0.15s var(--ease);
   }
-  .day:hover:not(:disabled) {
+  .cal__nav:hover:not(:disabled) {
     border-color: var(--navy-600);
+    background: var(--navy-050);
   }
-  .day[aria-pressed='true'] {
-    background: var(--navy-700);
-    border-color: var(--navy-700);
-    color: #fff;
-  }
-  .day:disabled {
-    opacity: 0.35;
+  .cal__nav:disabled {
+    opacity: 0.3;
     cursor: not-allowed;
   }
-  .day__dow {
-    display: block;
+  .cal__nav-prev {
+    transform: rotate(180deg);
+  }
+  .cal__dow {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 2px;
+    margin-bottom: 4px;
+  }
+  .cal__dow span {
+    text-align: center;
     font-size: 0.7rem;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: inherit;
-    opacity: 0.7;
-  }
-  .day__num {
-    display: block;
-    font-size: 1.2rem;
     font-weight: 600;
-    line-height: 1.2;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--ink-300);
+    padding: 0.25rem 0;
   }
-  .day__mon {
-    display: block;
-    font-size: 0.68rem;
-    opacity: 0.7;
+  .cal__grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 2px;
+  }
+  .cal__cell {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: inherit;
+    font-size: var(--fs-small);
+    font-weight: 500;
+    color: var(--ink-900);
+    border: 1.5px solid transparent;
+    border-radius: var(--radius-sm);
+    background: none;
+    cursor: pointer;
+    transition: all 0.12s var(--ease);
+  }
+  .cal__cell--empty {
+    cursor: default;
+  }
+  .cal__cell:not(:disabled):not(.cal__cell--empty):hover {
+    border-color: var(--navy-600);
+    background: var(--navy-050);
+  }
+  .cal__cell:disabled {
+    color: var(--ink-300);
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+  .cal__cell--today {
+    font-weight: 700;
+    box-shadow: inset 0 0 0 1.5px var(--line);
+  }
+  .cal__cell[aria-pressed='true'] {
+    background: var(--brand-blue);
+    border-color: var(--brand-blue);
+    color: var(--brand-yellow);
+    font-weight: 700;
   }
 
   .availability__windows {
@@ -370,6 +454,7 @@ const formReady = !!accessKey && accessKey !== 'YOUR_WEB3FORMS_ACCESS_KEY';
     gap: 0.5rem;
   }
   .slot {
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -393,13 +478,22 @@ const formReady = !!accessKey && accessKey !== 'YOUR_WEB3FORMS_ACCESS_KEY';
   .slot:hover {
     border-color: var(--navy-600);
   }
+  /* Multi-select: brand blue fill, yellow text, with a corner check. */
   .slot[aria-pressed='true'] {
-    background: var(--copper-600);
-    border-color: var(--copper-600);
-    color: #fff;
+    background: var(--brand-blue);
+    border-color: var(--brand-blue);
+    color: var(--brand-yellow);
   }
   .slot[aria-pressed='true'] span {
-    color: rgba(255, 255, 255, 0.85);
+    color: rgba(244, 198, 0, 0.85);
+  }
+  .slot[aria-pressed='true']::after {
+    content: '✓';
+    position: absolute;
+    top: 4px;
+    right: 6px;
+    font-size: 0.75rem;
+    color: var(--brand-yellow);
   }
   .availability__chosen {
     margin-top: var(--sp-4);
@@ -455,20 +549,26 @@ const formReady = !!accessKey && accessKey !== 'YOUR_WEB3FORMS_ACCESS_KEY';
   /**
    * Availability picker + form submission.
    *
-   * The day strip is generated client-side for the next business days. Today,
-   * these are all selectable. PHASE 2: fetch real free/busy from a serverless
-   * endpoint (Google Calendar FreeBusy API) and call `markBusy(dateISO)` /
-   * disable fully-booked days. A static site cannot read a private calendar
-   * directly — that requires a backend with a service account or OAuth.
+   * A month-grid calendar lets the user pick ONE preferred date (past days and
+   * Sundays disabled; navigation bounded to the current month forward). The
+   * three time windows are MULTI-select — pick any combination. Both feed the
+   * hidden `preferred_appointment` field that gets emailed.
    *
-   * Submission posts to Web3Forms via fetch so we can show inline success
-   * without a full page redirect. No appointment is ever auto-booked: the
-   * payload is simply emailed to the office for manual outreach.
+   * PHASE 2: fetch real free/busy from a serverless endpoint (Google Calendar
+   * FreeBusy API) and disable fully-booked dates via `isBusy(iso)`. A static
+   * site cannot read a private calendar directly — that needs a backend with a
+   * service account or OAuth.
+   *
+   * Submission posts to Web3Forms via fetch for inline success without a page
+   * redirect. No appointment is ever auto-booked: the payload is simply emailed
+   * to the office for manual outreach.
    */
-  type DayBtn = HTMLButtonElement;
-
   const form = document.querySelector('[data-request-form]') as HTMLFormElement | null;
-  const daysWrap = form?.querySelector('[data-days]') as HTMLElement | null;
+  const calWrap = form?.querySelector('[data-cal]') as HTMLElement | null;
+  const calGrid = form?.querySelector('[data-cal-grid]') as HTMLElement | null;
+  const calTitle = form?.querySelector('[data-cal-title]') as HTMLElement | null;
+  const calPrev = form?.querySelector('[data-cal-prev]') as HTMLButtonElement | null;
+  const calNext = form?.querySelector('[data-cal-next]') as HTMLButtonElement | null;
   const windowsWrap = form?.querySelector('[data-windows]') as HTMLElement | null;
   const chosenEl = form?.querySelector('[data-chosen]') as HTMLElement | null;
   const hiddenField = form?.querySelector('[data-availability-field]') as HTMLInputElement | null;
@@ -476,75 +576,135 @@ const formReady = !!accessKey && accessKey !== 'YOUR_WEB3FORMS_ACCESS_KEY';
 
   // Bail cleanly if any required node is missing (e.g. after a future refactor)
   // rather than throwing and killing the whole picker silently.
-  if (form && daysWrap && windowsWrap && chosenEl && hiddenField && statusEl) {
-    let selectedDay = '';
-    let selectedDayLabel = '';
-    let selectedWindow = '';
-
-    // Build the next 10 business days (skip Sun by default; plumber works Sat).
+  if (form && calGrid && calTitle && calPrev && calNext && windowsWrap && chosenEl && hiddenField && statusEl) {
     const DOW = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-    const MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const MON = ['January', 'February', 'March', 'April', 'May', 'June', 'July',
+      'August', 'September', 'October', 'November', 'December'];
+    const MON_SHORT = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
     const today = new Date();
-    let added = 0;
-    for (let i = 1; added < 10; i++) {
-      const d = new Date(today);
-      d.setDate(today.getDate() + i);
-      if (d.getDay() === 0) continue; // skip Sundays in the picker
-      added++;
-      // Build the ISO date from LOCAL parts, not toISOString() (which is UTC
-      // and would roll to the next day in the evening for US timezones — making
-      // the emailed date disagree with the human label).
-      const iso = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(
+    today.setHours(0, 0, 0, 0);
+    const todayISO = isoOf(today);
+
+    let selectedDay = ''; // ISO yyyy-mm-dd
+    let selectedDayLabel = '';
+    const selectedWindows = new Set<string>();
+
+    // Calendar is bounded: can't page earlier than the current month, and we
+    // cap forward navigation at 12 months out (plenty for a service request).
+    let viewYear = today.getFullYear();
+    let viewMonth = today.getMonth(); // 0-indexed
+    const minSerial = viewYear * 12 + viewMonth;
+    const maxSerial = minSerial + 12;
+
+    function isoOf(d: Date): string {
+      // Local parts, not toISOString() (UTC would roll the date in the evening).
+      return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(
         d.getDate()
       ).padStart(2, '0')}`;
-      const label = `${DOW[d.getDay()]} ${MON[d.getMonth()]} ${d.getDate()}`;
-      const btn = document.createElement('button') as DayBtn;
-      btn.type = 'button';
-      btn.className = 'day';
-      btn.dataset.date = iso;
-      btn.dataset.label = label;
-      btn.setAttribute('aria-pressed', 'false');
-      btn.innerHTML =
-        `<span class="day__dow">${DOW[d.getDay()]}</span>` +
-        `<span class="day__num">${d.getDate()}</span>` +
-        `<span class="day__mon">${MON[d.getMonth()]}</span>`;
-      daysWrap.appendChild(btn);
     }
 
-    const sync = () => {
-      if (selectedDayLabel && selectedWindow) {
-        chosenEl.textContent = `Requested: ${selectedDayLabel}, ${selectedWindow}`;
-      } else if (selectedDayLabel) {
-        chosenEl.textContent = `Requested: ${selectedDayLabel} — pick a time window`;
-      } else {
-        chosenEl.textContent = '';
-      }
-      hiddenField.value =
-        selectedDayLabel && selectedWindow
-          ? `${selectedDayLabel} (${selectedDay}) — ${selectedWindow}`
-          : selectedDayLabel
-          ? `${selectedDayLabel} (${selectedDay}) — no time preference`
-          : 'No preference given';
-    };
+    // Hook for Phase 2 calendar availability — return true to disable a date.
+    function isBusy(_iso: string): boolean {
+      return false;
+    }
 
-    daysWrap.addEventListener('click', (e) => {
-      const btn = (e.target as HTMLElement).closest('.day') as DayBtn | null;
-      if (!btn || btn.disabled) return;
-      daysWrap.querySelectorAll('.day').forEach((b) => b.setAttribute('aria-pressed', 'false'));
-      btn.setAttribute('aria-pressed', 'true');
-      selectedDay = btn.dataset.date || '';
-      selectedDayLabel = btn.dataset.label || '';
+    function renderCalendar() {
+      calTitle!.textContent = `${MON[viewMonth]} ${viewYear}`;
+      const serial = viewYear * 12 + viewMonth;
+      calPrev!.disabled = serial <= minSerial;
+      calNext!.disabled = serial >= maxSerial;
+
+      calGrid!.innerHTML = '';
+      const firstDow = new Date(viewYear, viewMonth, 1).getDay();
+      const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
+
+      // Leading blanks so the 1st lands under the right weekday.
+      for (let i = 0; i < firstDow; i++) {
+        const blank = document.createElement('div');
+        blank.className = 'cal__cell cal__cell--empty';
+        calGrid!.appendChild(blank);
+      }
+
+      for (let day = 1; day <= daysInMonth; day++) {
+        const d = new Date(viewYear, viewMonth, day);
+        const iso = isoOf(d);
+        const isPast = d < today;
+        const isSunday = d.getDay() === 0; // closed Sundays
+        const disabled = isPast || isSunday || isBusy(iso);
+
+        const cell = document.createElement('button');
+        cell.type = 'button';
+        cell.className = 'cal__cell';
+        cell.textContent = String(day);
+        cell.dataset.date = iso;
+        cell.dataset.label = `${DOW[d.getDay()]}, ${MON_SHORT[viewMonth]} ${day}, ${viewYear}`;
+        if (iso === todayISO) cell.classList.add('cal__cell--today');
+        if (disabled) {
+          cell.disabled = true;
+          cell.setAttribute('aria-disabled', 'true');
+        } else {
+          cell.setAttribute('aria-pressed', String(iso === selectedDay));
+        }
+        calGrid!.appendChild(cell);
+      }
+    }
+
+    function sync() {
+      const windows = [...selectedWindows];
+      // Human-readable summary line under the picker.
+      if (selectedDayLabel && windows.length) {
+        chosenEl!.textContent = `Requested: ${selectedDayLabel} — ${windows.join(', ')}`;
+      } else if (selectedDayLabel) {
+        chosenEl!.textContent = `Requested: ${selectedDayLabel} — add a time of day`;
+      } else if (windows.length) {
+        chosenEl!.textContent = `Requested: ${windows.join(', ')} — pick a date`;
+      } else {
+        chosenEl!.textContent = '';
+      }
+      // Value emailed to the office.
+      const datePart = selectedDayLabel
+        ? `${selectedDayLabel} (${selectedDay})`
+        : 'No date preference';
+      const timePart = windows.length ? windows.join(', ') : 'No time preference';
+      hiddenField!.value = `${datePart} — ${timePart}`;
+    }
+
+    // Date selection (event-delegated; survives month re-renders).
+    calGrid.addEventListener('click', (e) => {
+      const cell = (e.target as HTMLElement).closest('.cal__cell') as HTMLButtonElement | null;
+      if (!cell || cell.disabled || cell.classList.contains('cal__cell--empty')) return;
+      calGrid.querySelectorAll('.cal__cell[aria-pressed]').forEach((c) =>
+        c.setAttribute('aria-pressed', 'false')
+      );
+      cell.setAttribute('aria-pressed', 'true');
+      selectedDay = cell.dataset.date || '';
+      selectedDayLabel = cell.dataset.label || '';
       sync();
     });
 
+    calPrev.addEventListener('click', () => {
+      if (viewMonth === 0) { viewMonth = 11; viewYear--; } else viewMonth--;
+      renderCalendar();
+    });
+    calNext.addEventListener('click', () => {
+      if (viewMonth === 11) { viewMonth = 0; viewYear++; } else viewMonth++;
+      renderCalendar();
+    });
+
+    // Time windows — MULTI-select toggle.
     windowsWrap.addEventListener('click', (e) => {
       const btn = (e.target as HTMLElement).closest('.slot') as HTMLButtonElement | null;
       if (!btn) return;
-      windowsWrap.querySelectorAll('.slot').forEach((b) => b.setAttribute('aria-pressed', 'false'));
-      btn.setAttribute('aria-pressed', 'true');
-      selectedWindow = btn.dataset.window || '';
+      const win = btn.dataset.window || '';
+      const nowOn = btn.getAttribute('aria-pressed') !== 'true';
+      btn.setAttribute('aria-pressed', String(nowOn));
+      if (nowOn) selectedWindows.add(win);
+      else selectedWindows.delete(win);
       sync();
     });
+
+    renderCalendar();
 
     // Async submit with inline feedback.
     form.addEventListener('submit', async (e) => {
@@ -572,6 +732,14 @@ const formReady = !!accessKey && accessKey !== 'YOUR_WEB3FORMS_ACCESS_KEY';
         const json = await res.json();
         if (json.success) {
           form.reset();
+          // Reset the custom picker state too (form.reset doesn't touch it).
+          selectedDay = '';
+          selectedDayLabel = '';
+          selectedWindows.clear();
+          windowsWrap.querySelectorAll('.slot').forEach((b) =>
+            b.setAttribute('aria-pressed', 'false')
+          );
+          renderCalendar();
           chosenEl.textContent = '';
           showStatus(
             'Thanks — your request is in. A member of our team will reach out shortly to confirm a time. For emergencies, please call us directly.',
