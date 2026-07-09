@@ -5,7 +5,11 @@ cooling company serving Mercer County and central New Jersey. Built to be fast,
 clean, accessible, and to grow into scheduling/invoicing features over time.
 
 Content and navigation are an updated rebuild of the company's existing site
-(`allclearplumbingandheating.com`).
+(`allclearplumbingandheating.com`). Live at **allclearservices.com**.
+
+> **New here?** Read [`ARCHITECTURE.md`](./ARCHITECTURE.md) for the full build
+> guide (how it's structured, how to edit content, how to deploy, how to recover
+> a stuck deploy). See [`CHANGELOG.md`](./CHANGELOG.md) for what's changed.
 
 ---
 
@@ -33,35 +37,41 @@ npm run preview    # preview the built site
 ```
 src/
   components/   Header, Footer, Hero, TrustBar, ServiceCard, ServicesGrid,
-                ReviewWall, RequestForm, CTABand, PageHeader, Logo, Icon,
+                HousecallReviews, RequestForm, CTABand, PageHeader, Logo, Icon,
                 Analytics
-  data/         site.ts, services.ts, reviews.ts, service-areas.ts
+  data/         site.ts, services.ts
                 — all content lives here; edit data, not markup
   layouts/      Layout.astro (head, SEO, JSON-LD, fonts, GA, header/footer)
-  pages/        index, services, service-areas, reviews, about, contact, 404
+  lib/          url.ts (withBase() — base-path-aware internal links)
+  pages/        index, services, services/[slug], reviews, about, contact, 404
   styles/       global.css (design tokens + primitives)
-public/         favicon.svg, robots.txt
+public/         CNAME, favicon.png, og-default.png, robots.txt
 ```
 
-**To edit content** (services, towns, reviews, phone, copy) you almost never
-touch markup — edit the files in `src/data/`.
+**To edit content** (services, phone, copy, owner info) you almost never touch
+markup — edit the files in `src/data/`. Reviews come from the live Housecall Pro
+widget (`src/components/HousecallReviews.astro`), not a data file.
 
 ---
 
-## Launch checklist — fill these placeholders before going live
+## Launched — current live configuration
 
-All integration keys live in **`src/data/site.ts`** under `integrations`.
+The site is **live at allclearservices.com** with all core integrations wired.
+Snapshot of what's configured, and the optional knobs that remain. All
+integration keys live in **`src/data/site.ts`** under `integrations`.
 
-| What | Where | Notes |
-|------|-------|-------|
-| **Logo** | `src/components/Logo.astro` | Swap the inline SVG wordmark for Todd's logo file (drop into `src/assets/`, import via `astro:assets`). Swap point is documented in the file. |
-| **Web3Forms key** | `site.ts → web3formsAccessKey` | Free key at [web3forms.com](https://web3forms.com), tied to the company inbox. Form is disabled-safe until set. |
-| **Company email** | `site.ts → email` | The inbox service requests should reach. |
-| **GA4 Measurement ID** | `site.ts → gaMeasurementId` | `G-XXXXXXXXXX`. Analytics only loads once a real ID is present. |
-| **Real review text** | `src/data/reviews.ts` | Reviews are faithful reconstructions of the current site's testimonials — paste verbatim text + real attribution, or wire a live Google widget (below). |
-| **Angi profile URL** | `site.ts → social.angi` + `reviews.ts → reviewSummary.profileUrl` | Makes the "150+ reviews" credential clickable. |
-| **Production domain** | `astro.config.mjs → site` + `public/robots.txt` | Update if the new domain differs from `allclearplumbingandheating.com`. |
-| **HousecallPro booking link** (optional) | `site.ts → housecallBookingUrl` | If/when they want a self-serve "Book Online" CTA. See below. |
+| What | Where | Status |
+|------|-------|--------|
+| **Logo** | `src/components/Logo.astro` / `src/assets/` | ✅ Real logo integrated |
+| **Web3Forms key** | `site.ts → web3formsAccessKey` | ✅ Live, keyed to the company inbox |
+| **Company email** | `site.ts → email` | ✅ `njallclearservices@gmail.com` |
+| **GA4 Measurement ID** | `site.ts → gaMeasurementId` | ✅ `G-HGRE056LPY` |
+| **Reviews** | `src/components/HousecallReviews.astro` | ✅ Live Housecall Pro widget (homepage + `/reviews/`) |
+| **Owner & licenses** | `site.ts → owner`, `licenses[]` | ✅ Lucas Medina, Master Plumber #13552, GC #13VH12709700 |
+| **Instagram** | `site.ts → social.instagram` | ✅ `@allclearservices` (footer) |
+| **Production domain** | `astro.config.mjs → site` + `public/CNAME` | ✅ `allclearservices.com` |
+| **Housecall Pro booking link** (optional) | `site.ts → housecallBookingUrl` | ⬜ Blank — set it to show a "Book Online" CTA |
+| **Secondary Google-reviews widget** (optional) | `site.ts → googleReviewsEmbedHtml` | ⬜ Blank — future add-on; operator-trusted HTML only |
 
 ---
 
@@ -89,20 +99,25 @@ Measurement ID is configured, so dev/preview never pollute analytics. IP
 anonymization is on.
 
 ### Reviews
-Launch uses curated, real testimonials + the "150+ on Angi" credential — so the
-site looks credible on day one. (HousecallPro's own reviews widget starts empty
-and would not include the existing Angi reviews.) To add a **live Google review
-wall** later, set `site.ts → googleReviewsEmbedUrl` to a Trustindex/Elfsight
-embed; it renders on the Reviews page automatically.
+Reviews come from the **live Housecall Pro reviews widget**, embedded via
+`src/components/HousecallReviews.astro` (an iframe pointing at
+`client.housecallpro.com/reviews/widget/<id>`). It renders on both the homepage
+and `/reviews/`. This replaced the earlier curated-testimonials + "Angi Super
+Service Award" approach — the site now shows real, verified reviews from the
+platform the company actually uses. An **optional** secondary Google-reviews
+wall (Trustindex/Elfsight) can be added later by setting
+`site.ts → integrations.googleReviewsEmbedHtml`; it renders on the Reviews page
+via `set:html` (operator-trusted HTML only — never user input).
 
-### HousecallPro
-The company uses HousecallPro for invoicing/billing. **The site is intentionally
-decoupled from the HCP API** — HCP's API requires their top-tier MAX plan, a
-hired developer, and is built for *automation*, which is the opposite of the
-"email us, we'll schedule manually" requirement. If self-serve booking is ever
-wanted, set `housecallBookingUrl` to the hosted booking link
+### Housecall Pro
+The company uses Housecall Pro for invoicing/billing and reviews. **The site is
+intentionally decoupled from the HCP *API*** — the API requires their top-tier
+MAX plan, a hired developer, and is built for *automation*, which is the
+opposite of the "email us, we'll schedule manually" requirement. Reviews use the
+public embed widget (no API). If self-serve booking is ever wanted, set
+`housecallBookingUrl` to the hosted booking link
 (`https://book.housecallpro.com/book/<Business>/<id>?v2=true`) — no API or code
-change needed; a "Book Online" CTA appears on the contact page.
+change needed; a "Book Online" CTA appears.
 
 ---
 
@@ -125,10 +140,11 @@ automated booking, per requirement.
 
 ## Roadmap (the "built to last" path)
 
-- **Phase 1 (this build):** marketing site, service-request form → email,
-  curated reviews, GA4, SEO/JSON-LD, mobile + desktop.
+- **Phase 1 (shipped):** marketing site, service-request form → email, live
+  Housecall Pro reviews widget, GA4, SEO/JSON-LD, mobile + desktop.
 - **Phase 2:** Google Calendar availability display (above).
-- **Phase 3:** live Google reviews widget; optional HCP "Book Online" CTA.
+- **Phase 3:** optional secondary Google reviews wall; optional HCP "Book
+  Online" CTA.
 - **Phase 4:** authenticated customer area — scheduling, invoicing, payment
   status — via Astro API routes + HousecallPro API (MAX plan) or a dedicated
   backend.
