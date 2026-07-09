@@ -10,6 +10,15 @@ export const site = {
   legalName: 'All Clear Services',
   // Short tagline used in the header lockup and <title> suffixes.
   tagline: 'Plumbing, Heating & Cooling',
+
+  // ---- Ownership & licensing --------------------------------------------
+  // Owner-operator and the credentials customers ask for. Rendered on the
+  // About page and referenced in the footer fine print.
+  owner: 'Lucas Medina',
+  licenses: [
+    { label: 'Master Plumber License', number: '13552' },
+    { label: 'General Contractors License', number: '13VH12709700' },
+  ],
   // One-line positioning statement.
   blurb:
     'Licensed plumbing, heating, and cooling for homes and businesses across central New Jersey — done right, the first time.',
@@ -34,12 +43,16 @@ export const site = {
   },
 
   hours: 'Monday – Friday · emergency service available anytime',
-  emergencyLine: 'Emergency service available with one-hour response',
+  emergencyLine: 'Emergency service available — timely response',
 
   // ---- Social / external profiles (optional; hidden when empty) ----------
   social: {
-    // TODO: drop in the real Angi profile URL to make the credential clickable.
-    angi: '',
+    // Instagram handle @allclearservices — rendered as a button in the footer.
+    instagram: 'https://www.instagram.com/allclearservices',
+    instagramHandle: '@allclearservices',
+    // Housecall Pro is the review/booking platform; the reviews widget lives
+    // on the Reviews page and homepage (see HousecallReviews.astro).
+    housecallpro: '',
     google: '',
     facebook: '',
   },
@@ -61,7 +74,8 @@ export const site = {
     housecallBookingUrl: '',
 
     // Optional third-party Google-reviews widget embed (Trustindex/Elfsight).
-    // Left blank for launch — we seed real testimonials in reviews.ts instead.
+    // Left blank — the live Housecall Pro reviews widget is the primary source
+    // (see HousecallReviews.astro). This slot is a future add-on only.
     //
     // SECURITY: this is RAW HTML, injected unsanitized via `set:html` on the
     // reviews page. It is operator-trusted only — paste a widget snippet you

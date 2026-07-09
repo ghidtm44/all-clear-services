@@ -3,7 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import Hero from '../components/Hero.astro';
 import TrustBar from '../components/TrustBar.astro';
 import ServicesGrid from '../components/ServicesGrid.astro';
-import ReviewWall from '../components/ReviewWall.astro';
+import HousecallReviews from '../components/HousecallReviews.astro';
 import CTABand from '../components/CTABand.astro';
 import Icon from '../components/Icon.astro';
 import { site } from '../data/site';
@@ -23,9 +23,8 @@ import { withBase } from '../lib/url';
         <p class="eyebrow">Why All Clear</p>
         <h2>Local, honest, and on call when you need us</h2>
         <p class="lead">
-          We’re a local team that treats your home like our own. No song and
-          dance, no hourly meter running while we work — just clear answers,
-          fair flat pricing, and workmanship we stand behind.
+          We’re a local team that treats your home like our own. We provide
+          clear answers, fair flat pricing, and workmanship we stand behind.
         </p>
         <ul class="why__list">
           <li>
@@ -38,7 +37,7 @@ import { withBase } from '../lib/url';
           <li>
             <Icon name="clock" size={22} />
             <div>
-              <strong>One-hour emergency response</strong>
+              <strong>Timely emergency response</strong>
               <span>{site.hours}.</span>
             </div>
           </li>
@@ -75,7 +74,7 @@ import { withBase } from '../lib/url';
     </div>
   </section>
 
-  <ReviewWall limit={6} />
+  <HousecallReviews heading="Trusted by neighbors across central New Jersey" />
 
   <CTABand />
 </Layout>

@@ -101,12 +101,11 @@ export const services: Service[] = [
     title: 'Emergency Service',
     icon: 'clock',
     summary:
-      'Burst pipe? Flooded basement? We answer the phone and respond within the hour — any day of the week.',
+      'Burst pipe? Flooded basement? We answer the phone and respond in a timely manner.',
     description:
-      'When water is where it shouldn’t be, every minute counts. We answer the phone, respond within the hour, and work nights, weekends, and holidays. Residential or commercial — call us and we’ll be on the way.',
+      'When water is where it shouldn’t be, every minute counts. We answer the phone and respond in a timely manner. Residential or commercial — call us and we’ll be on the way.',
     items: [
-      'One-hour emergency response',
-      'Nights, weekends & holidays',
+      'Timely emergency response',
       'Residential & commercial',
       'Basement flooding & pumping',
     ],
@@ -115,8 +114,8 @@ export const services: Service[] = [
 
 /** Headline trust signals shown beneath the hero. */
 export const trustPoints = [
-  { stat: '150+', label: 'Five-star reviews on Angi' },
-  { stat: '1-Hour', label: 'Emergency response time' },
-  { stat: 'Multi-Year', label: 'Angi Super Service Award winner' },
+  { stat: '150+', label: 'Five-star reviews on Housecall Pro' },
+  { stat: 'Timely', label: 'Emergency response' },
+  { stat: 'Licensed', label: 'Master Plumber & General Contractor' },
   { stat: 'Free', label: 'No-obligation estimates' },
 ];

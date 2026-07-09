@@ -1,0 +1,59 @@
+---
+/**
+ * Housecall Pro reviews widget — the live, verified review source for the site.
+ * Replaces the previously curated quote wall. The iframe `src` is the embed
+ * snippet provided by Housecall Pro; only the sizing is adapted so the widget
+ * fills its column responsively instead of the raw fixed 1000×1000.
+ */
+interface Props {
+  eyebrow?: string;
+  heading?: string;
+}
+const {
+  eyebrow = 'Reviews',
+  heading = 'What our customers say',
+} = Astro.props;
+
+// Housecall Pro reviews widget for All Clear Services.
+const widgetSrc =
+  'https://client.housecallpro.com/reviews/widget/8610f70d-c9f1-46c7-868c-76f8e989c288';
+---
+
+<section class="section section--warm" id="reviews">
+  <div class="container">
+    <div class="section-head section-head--center reveal">
+      <p class="eyebrow">{eyebrow}</p>
+      <h2>{heading}</h2>
+    </div>
+    <div class="hcp-reviews reveal">
+      <!-- Start of Housecallpro Reviews Widget -->
+      <iframe
+        src={widgetSrc}
+        title="All Clear Services customer reviews on Housecall Pro"
+        loading="lazy"
+        class="hcp-reviews__frame"
+      ></iframe>
+      <!-- End of Housecallpro Reviews Widget -->
+    </div>
+  </div>
+</section>
+
+<style>
+  .hcp-reviews {
+    width: 100%;
+    max-width: 1000px;
+    margin-inline: auto;
+  }
+  .hcp-reviews__frame {
+    display: block;
+    width: 100%;
+    /* The widget content is tall; give it room and let it scroll internally. */
+    height: 1000px;
+    border: 0;
+  }
+  @media (max-width: 600px) {
+    .hcp-reviews__frame {
+      height: 1200px;
+    }
+  }
+</style>

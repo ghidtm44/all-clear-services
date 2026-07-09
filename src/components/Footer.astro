@@ -21,6 +21,19 @@ const year = new Date().getFullYear();
           <Icon name="globe" size={16} /> Hablamos Español
         </span>
       </div>
+      {
+        site.social.instagram && (
+          <a
+            href={site.social.instagram}
+            class="footer__social"
+            target="_blank"
+            rel="noopener"
+            aria-label={`All Clear Services on Instagram (${site.social.instagramHandle})`}
+          >
+            <Icon name="instagram" size={18} /> {site.social.instagramHandle}
+          </a>
+        )
+      }
     </div>
 
     <div class="footer__col">
@@ -69,6 +82,8 @@ const year = new Date().getFullYear();
     <div class="container footer__bar-inner">
       <p>© {year} {site.legalName}. All rights reserved.</p>
       <p class="footer__fine">
+        {site.licenses.map((lic) => `${lic.label} #${lic.number}`).join(' · ')}
+        <br />
         Residential & Commercial · Free Estimates · Serving Central New Jersey
       </p>
     </div>
@@ -108,6 +123,26 @@ const year = new Date().getFullYear();
     padding: 0.4rem 0.75rem;
     border: 1px solid rgba(255, 255, 255, 0.14);
     border-radius: var(--radius-pill);
+  }
+  .footer__social {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: var(--sp-4);
+    padding: 0.5rem 0.9rem;
+    font-size: var(--fs-small);
+    font-weight: 600;
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: var(--radius-pill);
+    transition: background 0.15s var(--ease), border-color 0.15s var(--ease);
+  }
+  .footer__social:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.4);
+  }
+  .footer__social :global(.icon) {
+    color: var(--copper-400, #e0a074);
   }
   .footer__title {
     font-family: var(--font-sans);

@@ -17,11 +17,6 @@ const values = [
     body: 'We charge by the job, not the hour. You’ll know the price before we pick up a tool — no song and dance.',
   },
   {
-    icon: 'clock',
-    title: 'Here when you need us',
-    body: 'Plumbing emergencies don’t wait for business hours. Neither do we — nights, weekends, and holidays.',
-  },
-  {
     icon: 'globe',
     title: 'Built on relationships',
     body: 'Many of our customers have called us for years. We treat your home like our own, every visit.',
@@ -61,6 +56,25 @@ const values = [
           conversions and underground excavation, residential and commercial,
           we’re the team your neighbors keep calling back.
         </p>
+
+        <div class="creds">
+          <p class="creds__owner">
+            <Icon name="wrench" size={18} />
+            <span>{site.owner}, Owner</span>
+          </p>
+          <ul class="creds__list">
+            {
+              site.licenses.map((lic) => (
+                <li class="creds__item">
+                  <Icon name="shield" size={16} />
+                  <span>
+                    {lic.label} #{lic.number}
+                  </span>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
       </div>
     </div>
   </section>
@@ -101,9 +115,49 @@ const values = [
     margin-top: var(--sp-4);
   }
 
+  .creds {
+    margin-top: var(--sp-6);
+    padding: var(--sp-5);
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+  }
+  .creds__owner {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--ink-900);
+  }
+  .creds__owner :global(.icon) {
+    color: var(--copper-600);
+  }
+  .creds__list {
+    list-style: none;
+    padding: 0;
+    margin: var(--sp-3) 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-3) var(--sp-5);
+  }
+  .creds__item {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: var(--fs-small);
+    color: var(--ink-700);
+  }
+  .creds__item :global(.icon) {
+    color: var(--copper-600);
+    flex-shrink: 0;
+  }
+
   .values {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: var(--sp-5);
   }
   .value {
